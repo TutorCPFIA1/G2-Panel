@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel G2 · CPFIA</title>
+<style>
+:root{--v:#2C5045;--v2:#3f7261;--vl:#e8f0ed;--t:#1f2a27;--g:#6b7773;--l:#e3e8e6;--bg:#fff;--a:#b45309;--al:#fff4e5;--r:#b42318;--rl:#fdecea;--ok:#1a7f4b;--card:#fff;--sh:0 1px 3px rgba(20,40,35,.08)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--t);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--v);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header h1{font-size:18px;margin:0;font-weight:650;flex:1;min-width:160px}
+header .u{font-size:12.5px;opacity:.92;text-align:right}
+.pill{display:inline-block;padding:1px 9px;border-radius:99px;background:#ffffff26;font-size:12px;margin-left:6px}
+main{max-width:1180px;margin:0 auto;padding:14px 16px 60px}
+nav.bc{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:4px 0 12px;font-size:14px}
+nav.bc a{color:var(--v);cursor:pointer;text-decoration:none;padding:3px 8px;border-radius:6px;background:var(--vl)}
+nav.bc a:hover{background:#d5e5df}nav.bc span.sep{color:var(--g)}nav.bc b{padding:3px 8px}
+h2{font-size:19px;margin:18px 0 8px;color:var(--v)}h3{font-size:15.5px;margin:0 0 8px}
+.sub{color:var(--g);font-size:13.5px;margin:-2px 0 10px}
+.grid{display:grid;gap:10px}.k{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--card);border:1px solid var(--l);border-radius:12px;padding:12px 14px;box-shadow:var(--sh)}
+.kpi{cursor:pointer;transition:.15s}.kpi:hover{border-color:var(--v2);transform:translateY(-1px)}
+.kpi .n{font-size:28px;font-weight:700;color:var(--v);line-height:1.1}.kpi .p{font-size:12.5px;color:var(--g)}.kpi .t{font-size:13.5px;margin-top:2px}
+.kpi.nc{cursor:default}.kpi.nc:hover{transform:none;border-color:var(--l)}
+.al{border-left:4px solid var(--a);background:var(--al)}.al .n{color:var(--a)}.al.r{border-left-color:var(--r);background:var(--rl)}.al.r .n{color:var(--r)}.al.z{border-left-color:var(--ok);background:#effaf3}.al.z .n{color:var(--ok)}
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0;cursor:pointer;padding:2px 4px;border-radius:6px}.bar:hover{background:var(--vl)}
+.bar .lb{width:150px;font-size:13.5px;flex:none}.bar .tr{flex:1;background:#eef2f0;border-radius:6px;height:20px;position:relative;overflow:hidden}
+.bar .fi{height:100%;background:var(--v2);border-radius:6px}.bar .vv{width:96px;text-align:right;font-size:13px;flex:none;font-variant-numeric:tabular-nums}
+.bar.nc{cursor:default}.bar.nc:hover{background:none}
+table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{padding:7px 8px;border-bottom:1px solid var(--l);text-align:left;vertical-align:top}
+th{background:#f4f7f6;position:sticky;top:0;font-weight:600;white-space:nowrap}td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.cl{cursor:pointer}tr.cl:hover td{background:var(--vl)}
+.wrap{overflow:auto;max-height:70vh;border:1px solid var(--l);border-radius:10px}
+.btn{background:var(--v);color:#fff;border:0;border-radius:8px;padding:8px 13px;font-size:14px;cursor:pointer}.btn:hover{background:var(--v2)}
+.btn.s{background:var(--vl);color:var(--v)}.btn.s:hover{background:#d5e5df}
+input[type=search],input[type=email],input[type=text],select{padding:8px 10px;border:1px solid #cfd8d5;border-radius:8px;font-size:14px;background:#fff;max-width:100%}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;align-items:center}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--vl);color:var(--v);margin:1px 2px 1px 0}.tag.a{background:var(--al);color:var(--a)}.tag.r{background:var(--rl);color:var(--r)}
+.step{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--l)}.step:last-child{border:0}
+.dot{width:20px;height:20px;border-radius:50%;flex:none;background:#dde4e1;color:#fff;text-align:center;font-size:12px;line-height:20px}.dot.ok{background:var(--ok)}.dot.no{background:var(--r)}
+.empty{padding:26px;text-align:center;color:var(--g)}
+.den{max-width:520px;margin:80px auto;text-align:center}.den h2{color:var(--r)}
+svg text{font-family:inherit}
+.note{font-size:12.5px;color:var(--g);margin-top:6px}
+@media(max-width:620px){.bar .lb{width:105px;font-size:12.5px}.bar .vv{width:78px}.kpi .n{font-size:24px}header .u{text-align:left}}
+</style></head><body>
+<header><h1>Panel G2 · CPFIA <span style="font-weight:400;font-size:13px;opacity:.85">Certificación AWS CLF-C02</span></h1><div class="u" id="who"></div></header>
+<main id="app"><div class="empty">Cargando…</div></main>
+<script src="config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+var P=null,full=false,S={v:'gen',tu:null,co:null,m:null,q:'',ord:null,est:null,cache:{}};
+var LB={Sin_ingreso:'Nunca han entrado',Sin_actividad:'Sin actividad reciente',Curso_pendiente:'Curso pendiente',Curso_entregado:'Curso entregado',Voucher_pendiente:'Voucher pendiente',Voucher_recibido:'Voucher recibido',Voucher_canjeado:'Voucher canjeado',Sin_fecha_examen:'Sin fecha de examen',Examen_programado:'Examen programado',Resultado_pendiente:'Resultado pendiente',Aprobaron:'Aprobaron',No_aprobaron:'No aprobaron',Falta_certificado:'Falta certificado',Certificado_oficial:'Certificado oficial',Bajas:'Bajas'};
+var DESC={Sin_ingreso:'Nunca han entrado al sitio.',Sin_actividad:'Llevan varios días sin entrar.',Curso_pendiente:'No han subido la constancia del curso.',Curso_entregado:'Ya subieron la constancia del curso.',Voucher_pendiente:'Curso entregado, sin voucher recibido o canjeado.',Voucher_recibido:'Dicen haberlo recibido, o ya lo canjearon.',Voucher_canjeado:'Subieron el correo de Pearson VUE.',Sin_fecha_examen:'Curso entregado, sin fecha de examen.',Examen_programado:'Con fecha y sin resultado.',Resultado_pendiente:'Su examen ya pasó, sin resultado.',Aprobaron:'Aprobaron el examen.',No_aprobaron:'No aprobaron el examen.',Falta_certificado:'Aprobaron, falta su certificado oficial.',Certificado_oficial:'Ya subieron su certificado.',Bajas:'Registraron que no certificarán.'};
+var AL={nunca:'Nunca han entrado',sinacceso:'Sin acceso reciente',sinvoucher:'Voucher: dijo que aún no',sinfecha:'Curso listo, sin fecha de examen',pasado:'Examen pasado sin resultado',faltacert:'Aprobó, falta certificado',duda:'Con duda abierta'};
+var AL_ORD=['nunca','sinacceso','sinvoucher','sinfecha','pasado','faltacert','duda'];
+var AL_R={pasado:1,duda:1,nunca:1};
+var FUN=[['n','Registrados'],['ing','Han entrado al sitio'],['curso','Curso entregado'],['vou','Voucher recibido'],['can','Voucher canjeado'],['fecha','Fecha de examen'],['pres','Presentaron examen'],['apr','Aprobaron'],['cert','Certificado oficial']];
+var TOTLB={n:'Registrados',ing:'Han entrado al sitio',curso:'Curso entregado',vou:'Voucher recibido',can:'Voucher canjeado',fecha:'Con fecha de examen',pres:'Presentaron examen',apr:'Aprobaron',nap:'No aprobaron',cert:'Certificado oficial',net:'Constancia NETEC',baja:'Bajas'};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function nf(n){return Number(n||0).toLocaleString('es-MX')}
+function pc(a,b){return b?Math.round(a*100/b)+'%':'—'}
+function $(h){document.getElementById('app').innerHTML=h;window.scrollTo(0,0)}
+/* ---------- datos agregados por ámbito ---------- */
+function scopeAgg(){
+  var A=P.agg;
+  if(S.co!=null){var c=A.cohorts.filter(function(x){return x.c===S.co&&(S.tu==null||x.tu===S.tu)});
+    if(!c.length)return mk([]);return merge(c)}
+  if(S.tu!=null){var t=A.tutores.filter(function(x){return x.tu===S.tu})[0];return t||mk([])}
+  return{tot:A.tot,li:A.listas,al:A.alertas};
+}
+function mk(){return{tot:{},li:{},al:{}}}
+function merge(a){var r={tot:{},li:{},al:{}};a.forEach(function(x){['tot','li','al'].forEach(function(k){for(var p in x[k])r[k][p]=(r[k][p]||0)+x[k][p]})});return r}
+function pred(m){ // m: {s:'tot'|'li'|'al',k:key}
+  if(m.s==='li')return function(e){return(e.li||[]).indexOf(m.k)>=0};
+  if(m.s==='al')return function(e){return(e.al||[]).indexOf(m.k)>=0};
+  return{n:function(){return true},ing:function(e){return e.ig>0},curso:function(e){return e.cu},vou:function(e){return e.vo==='Sí'||e.ca},can:function(e){return e.ca},fecha:function(e){return e.fe},pres:function(e){return e.re},apr:function(e){return e.re==='Aprobatorio'},nap:function(e){return e.re==='No aprobatorio'},cert:function(e){return e.ce},net:function(e){return e.ne},baja:function(e){return e.ba}}[m.k];
+}
+function mval(x,m){return(x[m.s]||{})[m.k]||0}
+function mlabel(m){return m.s==='li'?LB[m.k]:m.s==='al'?AL[m.k]:TOTLB[m.k]}
+/* ---------- navegación ---------- */
+function go(o){for(var k in o)S[k]=o[k];S.q='';S.ord=null;render()}
+function crumbs(){
+  var h=['<a onclick="go({v:\'gen\',tu:null,co:null,m:null})">General</a>'];
+  var sep='<span class="sep">›</span>';
+  if(S.v==='dudas'){return nav(h.concat([sep,'<b>Dudas</b>']))}
+  if(S.v==='desc'){return nav(h.concat([sep,'<b>Descargas</b>']))}
+  if(S.tu!=null)h.push(sep,S.co==null&&S.v==='scope'?'<b>'+esc(S.tu)+'</b>':'<a onclick="go({v:\'scope\',co:null,m:null})">'+esc(S.tu)+'</a>');
+  if(S.co!=null)h.push(sep,S.v==='scope'?'<b>Cohort '+S.co+'</b>':'<a onclick="go({v:\'scope\',m:null})">Cohort '+S.co+'</a>');
+  if(S.m)h.push(sep,S.v==='metric'||S.v==='lista'?'<b>'+esc(mlabel(S.m))+'</b>':'<a onclick="go({v:\'lista\'})">'+esc(mlabel(S.m))+'</a>');
+  if(S.v==='est')h.push(sep,'<b>'+esc(S.est.no)+'</b>');
+  return nav(h);
+}
+function nav(h){return'<nav class="bc">'+h.join('')+'</nav>'}
+function render(){
+  var h=crumbs();
+  try{ h+= S.v==='gen'||S.v==='scope'?vScope():S.v==='metric'?vMetric():S.v==='lista'?vLista():S.v==='est'?vEst():S.v==='dudas'?vDudas():vDesc() }catch(e){h+='<div class="empty">Error: '+esc(e.message)+'</div>'}
+  $(h);
+}
+/* ---------- vista general / ámbito ---------- */
+function vScope(){
+  var a=scopeAgg(),t=a.tot,tt=S.v==='gen'?'Panorama general':S.co!=null?'Cohort '+S.co+(S.tu?' · '+S.tu:''):S.tu;
+  var h='<h2 style="margin-top:4px">'+esc(tt)+'</h2><div class="sub">Actualizado '+esc(P.actualizado)+'. Da clic en cualquier cifra para bajar un nivel de detalle'+(full?' hasta cada estudiante.':'.')+'</div>';
+  if(S.v==='gen'){
+    h+='<div class="tools"><button class="btn s" onclick="location.reload()">↻ Recargar</button>'+(full?'<button class="btn s" onclick="go({v:\'dudas\'})">Dudas</button><button class="btn" onclick="go({v:\'desc\'})">⬇ Descargas</button>':'')+'</div>';
+  }
+  h+='<div class="grid k">'+FUN.slice(0,1).concat([['nap','No aprobaron'],['baja','Bajas']]).map(function(f){return kpi(t,f,'tot')}).join('')+'</div>';
+  h+='<h2>Embudo hacia la certificación</h2><div class="card">'+funnel(t)+'</div>';
+  h+='<h2>Requieren atención</h2><div class="grid k">'+AL_ORD.map(function(k){var n=a.al[k]||0;return'<div class="card kpi al '+(n===0?'z':AL_R[k]?'r':'')+'" onclick="go({v:\'metric\',m:{s:\'al\',k:\''+k+'\'}})"><div class="n">'+nf(n)+'</div><div class="t">'+AL[k]+'</div></div>'}).join('')+'</div>';
+  if(S.v==='gen'||S.tu==null||S.co==null){
+    h+='<h2>'+(S.v==='gen'?'Por tutor':S.co==null?'Cohorts de '+esc(S.tu||''):'')+'</h2>';
+    if(S.v==='gen')h+=tabla(P.agg.tutores.map(function(x){return{n:x.tu,sub:x.cohorts.length+' cohorts',t:x.tot,a:x.al,go:'go({v:\'scope\',tu:'+q(x.tu)+',co:null,m:null})'}}),'Tutor');
+    var cs=P.agg.cohorts.filter(function(c){return S.tu==null||c.tu===S.tu});
+    if(S.co==null){h+='<h2>'+(S.v==='gen'?'Por cohort':'')+'</h2>'+tabla(cs.map(function(x){return{n:'Cohort '+x.c,sub:x.tu,t:x.tot,a:x.al,go:'go({v:\'scope\',tu:'+q(S.tu==null?x.tu:S.tu)+',co:'+x.c+',m:null})'}}),'Cohort')}
+  }
+  if(S.v==='gen'){
+    h+='<div class="grid g2"><div><h2>Avance en el tiempo</h2><div class="card">'+trend()+'</div></div><div><h2>Exámenes programados por semana</h2><div class="card">'+semanas()+'</div></div></div>';
+    h+=dudasResumen();
+  }
+  if(full&&S.v==='scope'){h+='<div class="tools" style="margin-top:14px"><button class="btn" onclick="go({v:\'lista\',m:{s:\'tot\',k:\'n\'}})">Ver a todos los estudiantes de este ámbito ('+nf(t.n)+')</button></div>'}
+  return h;
+}
+function q(s){return"'"+String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'")+"'"}
+function kpi(t,f,s){var n=t[f[0]]||0;return'<div class="card kpi" onclick="go({v:\'metric\',m:{s:\''+s+'\',k:\''+f[0]+'\'}})"><div class="n">'+nf(n)+'</div><div class="t">'+f[1]+'</div>'+(f[0]!=='n'&&f[0]!=='nap'&&f[0]!=='baja'?'<div class="p">'+pc(n,t.n)+' de registrados</div>':'')+'</div>'}
+function funnel(t){var mx=t.n||1;return FUN.map(function(f){var n=t[f[0]]||0;return'<div class="bar" onclick="go({v:\'metric\',m:{s:\'tot\',k:\''+f[0]+'\'}})"><div class="lb">'+f[1]+'</div><div class="tr"><div class="fi" style="width:'+(n*100/mx)+'%"></div></div><div class="vv"><b>'+nf(n)+'</b> · '+pc(n,t.n)+'</div></div>'}).join('')}
+function tabla(rows,col){
+  if(!rows.length)return'<div class="card empty">Sin datos</div>';
+  var cols=[['n','Registrados'],['curso','Curso'],['can','Voucher canj.'],['fecha','Con fecha'],['apr','Aprobaron'],['cert','Certificado']];
+  var h='<div class="wrap"><table><thead><tr><th>'+col+'</th>'+cols.map(function(c){return'<th class="num">'+c[1]+'</th>'}).join('')+'<th class="num">% cert.</th><th class="num">Alertas</th></tr></thead><tbody>';
+  rows.forEach(function(r){var al=0;for(var k in r.a)if(k!=='duda')al+=r.a[k]; al=Object.keys(r.a).reduce(function(s,k){return s+(r.a[k]||0)},0);
+    h+='<tr class="cl" onclick="'+r.go+'"><td><b>'+esc(r.n)+'</b>'+(r.sub?'<div class="p" style="color:var(--g);font-size:12px">'+esc(r.sub)+'</div>':'')+'</td>'+cols.map(function(c){return'<td class="num">'+nf(r.t[c[0]])+'</td>'}).join('')+'<td class="num">'+pc(r.t.cert,r.t.n)+'</td><td class="num">'+(al?'<span class="tag a">'+nf(al)+'</span>':'0')+'</td></tr>'});
+  return h+'</tbody></table></div>';
+}
+/* ---------- gráficas ---------- */
+function trend(){
+  var H=P.agg.hist||[];if(H.length<2)return'<div class="empty">La gráfica aparece cuando haya al menos dos días de historial.<br>Se registra una captura por día.</div>';
+  var W=520,Ht=210,pl=38,pb=26,pt=10,pr=10,ks=[['curso','Curso','#7aa89a'],['can','Voucher canjeado','#e0a23b'],['apr','Aprobaron','#2C5045'],['cert','Certificado','#1a6fb5']];
+  var mx=Math.max.apply(null,H.map(function(h){return Math.max(h.curso||0,h.can||0,h.apr||0,h.cert||0)}))||1;
+  var x=function(i){return pl+i*(W-pl-pr)/(H.length-1)},y=function(v){return pt+(Ht-pt-pb)*(1-v/mx)};
+  var s='<svg viewBox="0 0 '+W+' '+Ht+'" width="100%" role="img" aria-label="Avance en el tiempo">';
+  for(var i=0;i<=4;i++){var v=Math.round(mx*i/4),yy=y(v);s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+yy+'" y2="'+yy+'" stroke="#e6ebe9"/><text x="'+(pl-5)+'" y="'+(yy+4)+'" font-size="10" text-anchor="end" fill="#6b7773">'+nf(v)+'</text>'}
+  var step=Math.ceil(H.length/6);H.forEach(function(h,i){if(i%step===0||i===H.length-1)s+='<text x="'+x(i)+'" y="'+(Ht-8)+'" font-size="10" text-anchor="middle" fill="#6b7773">'+esc(String(h.f).slice(5))+'</text>'});
+  ks.forEach(function(k){s+='<polyline fill="none" stroke="'+k[2]+'" stroke-width="2.2" points="'+H.map(function(h,i){return x(i)+','+y(h[k[0]]||0)}).join(' ')+'"/>'});
+  s+='</svg><div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px">'+ks.map(function(k){return'<span><span style="display:inline-block;width:10px;height:10px;background:'+k[2]+';border-radius:2px"></span> '+k[1]+'</span>'}).join('')+'</div>';
+  return s;
+}
+function semanas(){
+  var W=P.agg.semanas||[];if(!W.length)return'<div class="empty">Aún no hay fechas de examen registradas.</div>';
+  var mx=Math.max.apply(null,W.map(function(w){return w[1]}));
+  return W.map(function(w){var p=w[0].split('-');return'<div class="bar nc"><div class="lb">Semana del '+p[2]+'/'+p[1]+'</div><div class="tr"><div class="fi" style="width:'+(w[1]*100/mx)+'%;background:#e0a23b"></div></div><div class="vv"><b>'+nf(w[1])+'</b></div></div>'}).join('')+'<div class="note">Estudiantes con fecha de examen que aún no presentan.</div>';
+}
+function dudasResumen(){
+  var d=P.agg.dudas;
+  var h='<h2>Dudas de los estudiantes</h2><div class="grid k"><div class="card kpi nc"><div class="n">'+nf(d.total)+'</div><div class="t">Recibidas</div></div><div class="card kpi nc al '+(d.abiertas?'':'z')+'"><div class="n">'+nf(d.abiertas)+'</div><div class="t">Abiertas</div></div><div class="card kpi nc"><div class="n">'+(d.masVieja||0)+'</div><div class="t">Días de la más antigua abierta</div></div></div>';
+  if(d.porTema.length)h+='<div class="grid g2" style="margin-top:10px"><div class="card"><h3>Por tema</h3>'+d.porTema.slice(0,8).map(function(x){return'<div class="bar nc"><div class="lb">'+esc(x.te)+'</div><div class="tr"><div class="fi" style="width:'+(x.n*100/d.porTema[0].n)+'%"></div></div><div class="vv">'+x.n+(x.a?' · <span style="color:var(--a)">'+x.a+' abiertas</span>':'')+'</div></div>'}).join('')+'</div><div class="card"><h3>Por tutor</h3>'+d.porTutor.map(function(x){return'<div class="bar nc"><div class="lb">'+esc(x.tu)+'</div><div class="tr"><div class="fi" style="width:'+(x.n*100/d.porTutor[0].n)+'%;background:#7aa89a"></div></div><div class="vv">'+x.n+(x.a?' · <span style="color:var(--a)">'+x.a+' ab.</span>':'')+'</div></div>'}).join('')+'</div></div>';
+  if(full)h+='<div class="tools"><button class="btn s" onclick="go({v:\'dudas\'})">Ver y descargar las dudas</button></div>';
+  return h;
+}
+/* ---------- métrica: distribución por tutor y cohort ---------- */
+function vMetric(){
+  var m=S.m,A=P.agg,cs=A.cohorts.filter(function(c){return(S.tu==null||c.tu===S.tu)&&(S.co==null||c.c===S.co)});
+  var tu=A.tutores.filter(function(t){return S.tu==null||t.tu===S.tu});
+  var tot=S.co!=null||S.tu!=null?scopeAgg():{tot:A.tot,li:A.listas,al:A.alertas};
+  var desc=m.s==='li'?DESC[m.k]:'';
+  var h='<h2 style="margin-top:4px">'+esc(mlabel(m))+': '+nf(mval(tot,m))+'</h2><div class="sub">'+esc(desc)+(S.tu?' · '+esc(S.tu):'')+(S.co!=null?' · Cohort '+S.co:'')+'</div>';
+  if(full)h+='<div class="tools"><button class="btn" onclick="go({v:\'lista\'})">Ver a los '+nf(mval(tot,m))+' estudiantes</button></div>';
+  function bars(rows,fn){var mx=Math.max.apply(null,rows.map(function(r){return r.v}))||1;return rows.filter(function(r){return r.v>0||true}).map(function(r){return'<div class="bar" onclick="'+r.go+'"><div class="lb" style="width:170px">'+esc(r.n)+'</div><div class="tr"><div class="fi" style="width:'+(r.v*100/mx)+'%"></div></div><div class="vv"><b>'+nf(r.v)+'</b>'+(r.of?' · '+pc(r.v,r.of):'')+'</div></div>'}).join('')}
+  if(S.tu==null)h+='<h2>Por tutor</h2><div class="card">'+bars(tu.map(function(t){return{n:t.tu,v:mval(t,m),of:t.tot.n,go:'go({v:\'metric\',tu:'+q(t.tu)+'})'}}))+'</div>';
+  if(S.co==null)h+='<h2>Por cohort</h2><div class="card">'+bars(cs.map(function(c){return{n:'Cohort '+c.c+' · '+c.tu,v:mval(c,m),of:c.tot.n,go:'go({v:\'metric\',tu:'+q(c.tu)+',co:'+c.c+'})'}}))+'</div><div class="note">El porcentaje es sobre los registrados de cada tutor o cohort.</div>';
+  if(!full)h+='<div class="note">Tu acceso muestra cifras agregadas. El detalle por estudiante está disponible solo para coordinación y tutoría.</div>';
+  return h;
+}
+/* ---------- listas de estudiantes (solo Completo) ---------- */
+function filt(){var p=pred(S.m);return P.est.filter(function(e){return(S.tu==null||e.tu===S.tu)&&(S.co==null||e.co===S.co)&&p(e)})}
+function rowsQ(r){var q=S.q.toLowerCase();return q?r.filter(function(e){return(e.no+' '+e.em).toLowerCase().indexOf(q)>=0}):r}
+function vLista(){
+  if(!full)return'<div class="empty">Sin acceso al detalle.</div>';
+  var r=filt(),m=S.m;
+  var h='<h2 style="margin-top:4px">'+esc(mlabel(m))+'</h2><div class="sub">'+nf(r.length)+' estudiantes'+(S.tu?' · '+esc(S.tu):'')+(S.co!=null?' · Cohort '+S.co:'')+(m.s==='li'?' · '+esc(DESC[m.k]):'')+'</div>';
+  h+='<div class="tools"><input type="search" id="q" placeholder="Buscar por nombre o correo" value="'+esc(S.q)+'" oninput="S.q=this.value;fillRows()"><button class="btn" onclick="dlLista()">⬇ Descargar Excel</button><button class="btn s" onclick="dlLista(1)">CSV</button></div><div id="rows"></div>';
+  setTimeout(fillRows,0);return h;
+}
+function fillRows(){
+  var el=document.getElementById('rows');if(!el)return;var r=rowsQ(filt()).slice().sort(ordFn());
+  var show=r.slice(0,400);
+  var th=function(k,l,c){return'<th class="'+(c||'')+'" style="cursor:pointer" onclick="S.ord=\''+k+'\';fillRows()">'+l+'</th>'};
+  el.innerHTML=r.length?'<div class="wrap"><table><thead><tr>'+th('co','Cohort')+th('tu','Tutor')+th('no','Estudiante')+th('et','Etapa')+th('ds','Días sin acceso','num')+th('fe','Fecha examen')+'<th>Alertas</th><th>Siguiente paso</th></tr></thead><tbody>'+show.map(function(e){return'<tr class="cl" onclick="openEst('+P.est.indexOf(e)+')"><td>'+e.co+'</td><td>'+esc(e.tu)+'</td><td><b>'+esc(e.no)+'</b><div style="color:var(--g);font-size:12px">'+esc(e.em)+'</div></td><td>'+esc(e.et)+'</td><td class="num">'+(e.ds===''?'—':e.ds)+'</td><td>'+esc(e.fe||'')+'</td><td>'+(e.al||[]).map(function(k){return'<span class="tag '+(AL_R[k]?'r':'a')+'">'+AL[k]+'</span>'}).join('')+'</td><td>'+esc(e.pa)+'</td></tr>'}).join('')+'</tbody></table></div>'+(r.length>400?'<div class="note">Se muestran 400 de '+r.length+'. Usa la búsqueda o descarga el Excel completo.</div>':''):'<div class="empty">Sin resultados.</div>';
+}
+function ordFn(){var k=S.ord;if(!k)return function(a,b){return a.co-b.co||String(a.no).localeCompare(String(b.no))};return function(a,b){var x=a[k],y=b[k];if(x===''||x==null)return 1;if(y===''||y==null)return-1;return typeof x==='number'?(k==='ds'?y-x:x-y):String(x).localeCompare(String(y))}}
+function openEst(i){S.est=P.est[i];S.v='est';render()}
+/* ---------- estudiante ---------- */
+function vEst(){
+  var e=S.est,ds=P.dudas.filter(function(d){return d.em===e.em});
+  function st(ok,no,t,d){return'<div class="step"><div class="dot '+(ok?'ok':no?'no':'')+'">'+(ok?'✓':no?'✕':'')+'</div><div><b>'+t+'</b><div style="color:var(--g);font-size:13px">'+esc(d||'')+'</div></div></div>'}
+  var res=e.re;
+  var h='<h2 style="margin-top:4px">'+esc(e.no)+'</h2><div class="sub">'+esc(e.em)+' · Cohort '+e.co+' · Tutor: '+esc(e.tu)+'</div>';
+  h+='<div class="grid g2"><div class="card"><h3>Avance</h3>'+
+    st(e.ig>0,0,'Ingresó al sitio',e.ig>0?e.ig+' ingresos · último: '+(e.ua||'—')+(e.ds!==''?' (hace '+e.ds+' días)':''):'Nunca ha entrado')+
+    st(e.cu,0,'Constancia del curso (Skill Builder)',e.cu?'Entregada '+(e.fc||''):'Pendiente')+
+    st(e.vo==='Sí'||e.ca,e.vo==='Aún no',"Voucher recibido",e.ca?'Canjeado (correo de Pearson VUE subido)':e.vo==='Sí'?'Dice haberlo recibido':e.vo==='Aún no'?'Dijo que aún no lo recibe':'Sin responder')+
+    st(!!e.fe,0,'Fecha de examen',e.fe||'Sin fecha registrada')+
+    st(res==='Aprobatorio',res==='No aprobatorio','Resultado del examen',res||'Sin resultado')+
+    st(e.ce,0,'Certificado oficial AWS',e.ce?'Subido':'Pendiente')+
+    (e.ba?st(0,1,'Baja registrada',e.mo||''):'')+
+    '</div><div class="card"><h3>Siguiente paso</h3><p style="margin:0 0 10px"><b>'+esc(e.pa)+'</b></p><div>'+(e.al||[]).map(function(k){return'<span class="tag '+(AL_R[k]?'r':'a')+'">'+AL[k]+'</span>'}).join('')+'</div><h3 style="margin-top:14px">Simulacro</h3><p style="margin:0">'+(e.si===''||e.si==null?'Sin intentos':'Mejor puntaje: '+esc(e.si))+'</p><h3 style="margin-top:14px">Etapa</h3><p style="margin:0">'+esc(e.et)+'</p></div></div>';
+  h+='<h2>Dudas de este estudiante ('+ds.length+')</h2>'+(ds.length?ds.map(function(d){return'<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+esc(d.te)+'</b><span class="tag '+(d.ab?'a':'')+'">'+esc(d.es)+'</span></div><div class="sub" style="margin:2px 0 6px">'+esc(d.fo)+' · '+esc(d.fe)+'</div><div>'+esc(d.tx)+'</div>'+(d.re?'<div style="margin-top:6px;padding:8px;background:var(--vl);border-radius:8px"><b>Respuesta:</b> '+esc(d.re)+'<div class="sub" style="margin:2px 0 0">'+esc(d.fr||'')+'</div></div>':'')+'</div>'}).join(''):'<div class="card empty">Sin dudas registradas.</div>');
+  return h;
+}
+/* ---------- dudas ---------- */
+function vDudas(){
+  if(!full)return'<div class="empty">Sin acceso.</div>';
+  var d=P.agg.dudas;
+  var h='<h2 style="margin-top:4px">Dudas</h2><div class="sub">'+nf(d.total)+' recibidas · '+nf(d.abiertas)+' abiertas</div>'+
+    '<div class="tools"><select id="fe" onchange="fillDudas()"><option value="ab">Solo abiertas</option><option value="">Todas</option></select><select id="ft" onchange="fillDudas()"><option value="">Todos los tutores</option>'+P.agg.tutores.map(function(t){return'<option>'+esc(t.tu)+'</option>'}).join('')+'<option>Sin tutor asignado</option></select><input type="search" id="fq" placeholder="Buscar" oninput="fillDudas()"><button class="btn" onclick="dlDudas()">⬇ Descargar Excel</button></div><div id="drows"></div>';
+  setTimeout(fillDudas,0);return h;
+}
+function dudasF(){var ab=document.getElementById('fe').value,tu=document.getElementById('ft').value,q=document.getElementById('fq').value.toLowerCase();
+  return P.dudas.filter(function(x){return(!ab||x.ab)&&(!tu||x.tu===tu)&&(!q||(x.no+' '+x.em+' '+x.tx+' '+x.te).toLowerCase().indexOf(q)>=0)}).sort(function(a,b){return b.ab-a.ab||(b.di||0)-(a.di||0)})}
+function fillDudas(){var r=dudasF();document.getElementById('drows').innerHTML=r.length?'<div class="wrap"><table><thead><tr><th>Folio</th><th>Fecha</th><th>Estudiante</th><th>Cohort</th><th>Tutor</th><th>Tema</th><th>Duda</th><th>Estado</th><th class="num">Días</th></tr></thead><tbody>'+r.slice(0,400).map(function(x){var i=P.est.map(function(e){return e.em}).indexOf(x.em);return'<tr class="'+(i>=0?'cl':'')+'"'+(i>=0?' onclick="openEst('+i+')"':'')+'><td>'+esc(x.fo)+'</td><td>'+esc(x.fe)+'</td><td><b>'+esc(x.no)+'</b></td><td>'+x.co+'</td><td>'+esc(x.tu)+'</td><td>'+esc(x.te)+'</td><td>'+esc(x.tx)+(x.re?'<div style="margin-top:4px;color:var(--v)"><b>R:</b> '+esc(x.re)+'</div>':'')+'</td><td><span class="tag '+(x.ab?'a':'')+'">'+esc(x.es)+'</span></td><td class="num">'+(x.ab?x.di:'')+'</td></tr>'}).join('')+'</tbody></table></div>':'<div class="empty">Sin dudas con ese filtro.</div>'}
+/* ---------- descargas ---------- */
+function vDesc(){
+  if(!full)return'<div class="empty">Sin acceso.</div>';
+  var h='<h2 style="margin-top:4px">Descargas</h2><div class="sub">Cada archivo se genera al momento con los datos de la última actualización ('+esc(P.actualizado)+').</div>';
+  h+='<h2>Un Excel por tutor</h2><div class="card"><p style="margin-top:0">Libro de Excel con pestañas por etapa (Con alertas, Sin ingreso, Curso pendiente, Voucher pendiente, Sin fecha, Resultado pendiente, Falta certificado…) y las dudas de sus estudiantes. Para enviarlo al tutor.</p><div class="tools">'+P.agg.tutores.map(function(t){return'<button class="btn s" onclick="dlTutor('+q(t.tu)+')">⬇ '+esc(t.tu)+' <span class="tag">'+t.tot.n+'</span></button>'}).join('')+'<button class="btn" onclick="dlTodosTutores()">⬇ Todos los tutores (un archivo por tutor)</button></div></div>';
+  h+='<h2>Por etapa</h2><div class="grid g2">'+Object.keys(LB).map(function(k){var n=P.agg.listas[k]||0;return'<div class="card"><b>'+LB[k]+'</b> <span class="tag">'+nf(n)+'</span><div class="sub" style="margin:2px 0 8px">'+DESC[k]+'</div><button class="btn s" onclick="dlEtapa(\''+k+'\')">⬇ Excel</button> <button class="btn s" onclick="go({v:\'lista\',tu:null,co:null,m:{s:\'li\',k:\''+k+'\'}})">Ver lista</button></div>'}).join('')+'</div>';
+  h+='<h2>Dudas</h2><div class="card"><button class="btn s" onclick="dlDudas(1)">⬇ Todas las dudas (Excel)</button></div>';
+  return h;
+}
+/* ---------- exportación ---------- */
+var HDR=['Cohort','Tutor','Nombre','Correo','Etapa','Siguiente paso','Alertas','Ingresos','Último acceso','Días sin acceso','Constancia curso','Voucher','Voucher canjeado','Fecha de examen','Resultado','Certificado oficial','Constancia NETEC','Simulacro (mejor)','Dudas','Motivo baja'];
+function fila(e){return[e.co,e.tu,e.no,e.em,e.et,e.pa,(e.al||[]).map(function(k){return AL[k]}).join('; '),e.ig,e.ua||'',e.ds,e.cu?'Sí':'No',e.vo||'',e.ca?'Sí':'No',e.fe||'',e.re||'',e.ce?'Sí':'No',e.ne?'Sí':'No',e.si===''||e.si==null?'':e.si,e.du||0,e.mo||'']}
+var DH=['Folio','Fecha','Cohort','Tutor','Estudiante','Correo','Tema','Duda','Estado','Días abierta','Respuesta','Fecha respuesta'];
+function dfila(x){return[x.fo,x.fe,x.co,x.tu,x.no,x.em,x.te,x.tx,x.es,x.ab?x.di:'',x.re||'',x.fr||'']}
+function fecha(){return new Date().toISOString().slice(0,10)}
+function safe(s){return String(s).replace(/[^\wáéíóúñÁÉÍÓÚÑ -]+/g,'').replace(/\s+/g,'_').slice(0,50)}
+function guardar(wb,nombre){
+  if(window.XLSX){XLSX.writeFile(wb,nombre+'.xlsx');return}
+  // respaldo CSV de la primera hoja
+  var rows=wb.__rows||[];var csv='\ufeff'+rows.map(function(r){return r.map(function(c){return'"'+String(c==null?'':c).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=nombre+'.csv';a.click();
+}
+function libro(hojas){ // hojas: [[nombre, header, filas]]
+  var wb=window.XLSX?XLSX.utils.book_new():{__rows:[]};
+  hojas.forEach(function(h){var aoa=[h[1]].concat(h[2]);
+    if(window.XLSX){var ws=XLSX.utils.aoa_to_sheet(aoa);ws['!cols']=h[1].map(function(c,i){return{wch:[6,22,28,30,22,40,34,9,16,9,10,10,10,13,14,10,10,10,7,24][i]||14}});ws['!autofilter']={ref:ws['!ref']};XLSX.utils.book_append_sheet(wb,ws,h[0].slice(0,31))}
+    else if(!wb.__rows.length)wb.__rows=aoa});
+  return wb;
+}
+function dlLista(csv){var r=rowsQ(filt()),n='G2_'+safe(mlabel(S.m)+(S.tu?'_'+S.tu:'')+(S.co!=null?'_cohort'+S.co:''))+'_'+fecha();
+  var wb=libro([[mlabel(S.m),HDR,r.map(fila)]]);if(csv){wb={__rows:[HDR].concat(r.map(fila))};var w=window.XLSX;window.XLSX=null;guardar(wb,n);window.XLSX=w}else guardar(wb,n)}
+function dlEtapa(k){var p=pred({s:'li',k:k}),r=P.est.filter(p);guardar(libro([[LB[k],HDR,r.map(fila)]]),'G2_'+k+'_'+fecha())}
+function dlDudas(todas){var r=todas?P.dudas:dudasF();guardar(libro([['Dudas',DH,r.map(dfila)]]),'G2_Dudas_'+fecha())}
+function libroTutor(t){
+  var E=P.est.filter(function(e){return e.tu===t}),D=P.dudas.filter(function(x){return x.tu===t});
+  var por=function(k){return E.filter(function(e){return(e.li||[]).indexOf(k)>=0}).map(fila)};
+  var res=[['Resumen',['Concepto','Estudiantes'],[['Tutor',t],['Generado',fecha()+' (datos: '+P.actualizado+')'],['Registrados',E.length],['Con alertas',E.filter(function(e){return(e.al||[]).length}).length]].concat(Object.keys(LB).map(function(k){return[LB[k],por(k).length]}))]];
+  res.push(['Todos',HDR,E.map(fila)]);
+  res.push(['Con alertas',HDR,E.filter(function(e){return(e.al||[]).length}).map(fila)]);
+  ['Sin_ingreso','Sin_actividad','Curso_pendiente','Voucher_pendiente','Sin_fecha_examen','Examen_programado','Resultado_pendiente','No_aprobaron','Falta_certificado','Aprobaron','Certificado_oficial','Bajas'].forEach(function(k){res.push([LB[k],HDR,por(k)])});
+  res.push(['Dudas',DH,D.map(dfila)]);
+  return libro(res);
+}
+function dlTutor(t){guardar(libroTutor(t),'G2_Tutor_'+safe(t)+'_'+fecha())}
+function dlTodosTutores(){P.agg.tutores.forEach(function(t,i){setTimeout(function(){dlTutor(t.tu)},i*700)})}
+/* ---------- arranque y acceso (correo + código) ---------- */
+var CFG=window.PANEL_CFG||{},SES=null;
+function ls(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+function api(action,datos){
+  var ctl=new AbortController(),t=setTimeout(function(){ctl.abort()},60000);
+  return fetch(CFG.apiUrl,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action:action},datos||{})),signal:ctl.signal,redirect:'follow'})
+   .then(function(r){return r.json()}).catch(function(){return{ok:false,codigo:'red',error:'No pudimos conectar. Revisa tu internet e intenta de nuevo.'}}).then(function(j){clearTimeout(t);return j});
+}
+function denegado(r){$('<div class="den"><h2>Sin acceso</h2><p>'+esc(r.motivo||'')+'</p>'+(r.correo?'<p class="sub">Cuenta: <b>'+esc(r.correo)+'</b></p>':'')+'<p class="sub">Si debes tener acceso, solicítalo a la tutora del grupo para que agregue tu correo.</p><p><button class="btn s" onclick="salir()">Salir</button></p></div>')}
+function listo(r){
+  if(!r||r.denegado)return denegado(r||{});
+  P=r;full=r.rol==='Completo';
+  document.getElementById('who').innerHTML=esc(r.usuario.nombre)+'<span class="pill">'+(full?'Acceso completo':'Solo cifras')+'</span> <a href="#" onclick="salir();return false" style="color:#fff;font-size:12px;margin-left:6px">Salir</a><br>Datos al '+esc(r.actualizado);
+  render();
+}
+function salir(){ls('g2p_ses',null);SES=null;P=null;document.getElementById('who').innerHTML='';pantallaCorreo()}
+function pantallaCorreo(msg){
+  $('<div class="den card" style="padding:22px;text-align:left"><h2 style="color:var(--v);margin-top:0">Entrar al Panel</h2><p class="sub">Escribe tu correo de INFOTEC. Si tiene acceso, te enviaremos un código de 6 dígitos.</p>'+(msg?'<p style="color:var(--r)">'+esc(msg)+'</p>':'')+'<p><input type="email" id="lc" placeholder="correo@infotec.mx" autocomplete="email" style="width:100%"></p><p><button class="btn" id="lb" onclick="pedir()">Enviar código</button></p></div>');
+  var el=document.getElementById('lc');el.value=ls('g2p_correo')||'';el.addEventListener('keydown',function(e){if(e.key==='Enter')pedir()});
+}
+function pedir(){
+  var c=document.getElementById('lc').value.trim().toLowerCase(),b=document.getElementById('lb');if(!c)return;b.disabled=true;b.textContent='Enviando…';
+  api('codigo',{correo:c}).then(function(j){ if(!j.ok){b.disabled=false;b.textContent='Enviar código';return pantallaCorreo(j.error)} ls('g2p_correo',c);pantallaCodigo(c,j.mensaje)});
+}
+function pantallaCodigo(c,msg,err){
+  $('<div class="den card" style="padding:22px;text-align:left"><h2 style="color:var(--v);margin-top:0">Escribe tu código</h2><p class="sub">'+esc(msg||'')+'</p>'+(err?'<p style="color:var(--r)">'+esc(err)+'</p>':'')+'<p><input type="text" id="lk" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code" style="width:100%;font-size:22px;letter-spacing:6px;text-align:center"></p><p><button class="btn" id="lb" onclick="entrar(\''+esc(c)+'\')">Entrar</button> <button class="btn s" onclick="pantallaCorreo()">Cambiar correo</button></p></div>');
+  var el=document.getElementById('lk');el.focus();el.addEventListener('keydown',function(e){if(e.key==='Enter')entrar(c)});
+}
+function entrar(c){
+  var k=document.getElementById('lk').value.trim(),b=document.getElementById('lb');if(!k)return;b.disabled=true;b.textContent='Verificando…';
+  api('entrar',{correo:c,codigo:k}).then(function(j){ if(!j.ok)return pantallaCodigo(c,'',j.error);SES={token:j.token,exp:j.exp};ls('g2p_ses',SES);cargar()});
+}
+function cargar(){
+  $('<div class="empty">Cargando datos…</div>');
+  api('panel',{token:SES.token}).then(function(j){
+    if(!j.ok){if(j.codigo==='sesion'){ls('g2p_ses',null);return pantallaCorreo(j.error)}return $('<div class="den"><h2>No se pudo cargar</h2><p>'+esc(j.error)+'</p><p><button class="btn" onclick="cargar()">Reintentar</button></p></div>')}
+    listo(j);
+  });
+}
+if(window.__MOCK__){listo(window.__MOCK__)}
+else if(!CFG.apiUrl){$('<div class="den"><h2>Falta configurar</h2><p>Abre <b>config.js</b> y pega la URL de la aplicación web de Apps Script en <code>apiUrl</code>.</p></div>')}
+else{SES=ls('g2p_ses');if(SES&&SES.exp*1000>Date.now())cargar();else pantallaCorreo()}
+</script></body></html>
