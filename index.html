@@ -33,7 +33,7 @@ tr.cl{cursor:pointer}tr.cl:hover td{background:var(--vl)}
 .btn.s{background:var(--vl);color:var(--v)}.btn.s:hover{background:#d5e5df}
 input[type=search],input[type=email],input[type=text],select{padding:8px 10px;border:1px solid #cfd8d5;border-radius:8px;font-size:14px;background:#fff;max-width:100%}
 .tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;align-items:center}
-.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--vl);color:var(--v);margin:1px 2px 1px 0}.tag.a{background:var(--al);color:var(--a)}.tag.r{background:var(--rl);color:var(--r)}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--vl);color:var(--v);margin:1px 2px 1px 0}.tag.a{background:var(--al);color:var(--a)}.tag.r{background:var(--rl);color:var(--r)}.tag.ok{background:#e3f5ea;color:var(--ok)}
 .step{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--l)}.step:last-child{border:0}
 .dot{width:20px;height:20px;border-radius:50%;flex:none;background:#dde4e1;color:#fff;text-align:center;font-size:12px;line-height:20px}.dot.ok{background:var(--ok)}.dot.no{background:var(--r)}
 .empty{padding:26px;text-align:center;color:var(--g)}
@@ -147,11 +147,21 @@ function semanas(){
   var mx=Math.max.apply(null,W.map(function(w){return w[1]}));
   return W.map(function(w){var p=w[0].split('-');return'<div class="bar nc"><div class="lb">Semana del '+p[2]+'/'+p[1]+'</div><div class="tr"><div class="fi" style="width:'+(w[1]*100/mx)+'%;background:#e0a23b"></div></div><div class="vv"><b>'+nf(w[1])+'</b></div></div>'}).join('')+'<div class="note">Estudiantes con fecha de examen que aún no presentan.</div>';
 }
+function estadoDuda(x){return x.au?['Registro automático','']:x.at?['✓ Atendida','ok']:x.esc?['Escalada','r']:['Pendiente','a']}
+function badge(x){var e=estadoDuda(x);return'<span class="tag '+e[1]+'">'+e[0]+'</span>'}
 function dudasResumen(){
   var d=P.agg.dudas;
-  var h='<h2>Dudas de los estudiantes</h2><div class="grid k"><div class="card kpi nc"><div class="n">'+nf(d.total)+'</div><div class="t">Recibidas</div></div><div class="card kpi nc al '+(d.abiertas?'':'z')+'"><div class="n">'+nf(d.abiertas)+'</div><div class="t">Abiertas</div></div><div class="card kpi nc"><div class="n">'+(d.masVieja||0)+'</div><div class="t">Días de la más antigua abierta</div></div></div>';
-  if(d.porTema.length)h+='<div class="grid g2" style="margin-top:10px"><div class="card"><h3>Por tema</h3>'+d.porTema.slice(0,8).map(function(x){return'<div class="bar nc"><div class="lb">'+esc(x.te)+'</div><div class="tr"><div class="fi" style="width:'+(x.n*100/d.porTema[0].n)+'%"></div></div><div class="vv">'+x.n+(x.a?' · <span style="color:var(--a)">'+x.a+' abiertas</span>':'')+'</div></div>'}).join('')+'</div><div class="card"><h3>Por tutor</h3>'+d.porTutor.map(function(x){return'<div class="bar nc"><div class="lb">'+esc(x.tu)+'</div><div class="tr"><div class="fi" style="width:'+(x.n*100/d.porTutor[0].n)+'%;background:#7aa89a"></div></div><div class="vv">'+x.n+(x.a?' · <span style="color:var(--a)">'+x.a+' ab.</span>':'')+'</div></div>'}).join('')+'</div></div>';
-  if(full)h+='<div class="tools"><button class="btn s" onclick="go({v:\'dudas\'})">Ver y descargar las dudas</button></div>';
+  var h='<h2>Atención a las dudas</h2><div class="sub">Las dudas enviadas desde el sitio las atiende la tutoría. “Tutor asignado” es solo el del estudiante.</div><div class="grid k">'+
+   '<div class="card kpi nc"><div class="n">'+nf(d.total)+'</div><div class="t">Recibidas</div></div>'+
+   '<div class="card kpi nc al '+(d.total&&d.atendidas===d.total?'z':'')+'"><div class="n" style="color:var(--ok)">'+nf(d.atendidas)+'</div><div class="t">Atendidas · '+(d.total?d.pctAtendidas+'%':'—')+'</div></div>'+
+   '<div class="card kpi nc al '+(d.abiertas?'':'z')+'"><div class="n">'+nf(d.abiertas)+'</div><div class="t">Pendientes</div></div>'+
+   '<div class="card kpi nc"><div class="n">'+nf(d.escaladas||0)+'</div><div class="t">Escaladas a coordinación</div></div>'+
+   '<div class="card kpi nc"><div class="n">'+(d.promDias||0)+'</div><div class="t">Días promedio de atención</div></div>'+
+   '<div class="card kpi nc"><div class="n">'+(d.masVieja||0)+'</div><div class="t">Días de la pendiente más antigua</div></div></div>';
+  if(d.porTema.length){var pc2=d.porCohort.filter(function(x){return x.a>0}).sort(function(a,b){return b.a-a.a}).slice(0,10);
+    h+='<div class="grid g2" style="margin-top:10px"><div class="card"><h3>Por tema</h3>'+d.porTema.slice(0,8).map(function(x){return'<div class="bar nc"><div class="lb">'+esc(x.te)+'</div><div class="tr"><div class="fi" style="width:'+(x.n*100/d.porTema[0].n)+'%"></div></div><div class="vv">'+x.n+(x.a?' · <span style="color:var(--a)">'+x.a+' pend.</span>':' · <span style="color:var(--ok)">al día</span>')+'</div></div>'}).join('')+'</div>'+
+    '<div class="card"><h3>Cohorts con más pendientes</h3>'+(pc2.length?pc2.map(function(x){return'<div class="bar nc"><div class="lb">Cohort '+x.co+'</div><div class="tr"><div class="fi" style="width:'+(x.a*100/pc2[0].a)+'%;background:#e0a23b"></div></div><div class="vv">'+x.a+' de '+x.n+'</div></div>'}).join(''):'<div class="empty">Sin dudas pendientes.</div>')+'</div></div>';}
+  if(full)h+='<div class="tools"><button class="btn s" onclick="go({v:\'dudas\'})">Ver, responder y descargar las dudas</button></div>';
   return h;
 }
 /* ---------- métrica: distribución por tutor y cohort ---------- */
@@ -201,20 +211,67 @@ function vEst(){
     st(e.ce,0,'Certificado oficial AWS',e.ce?'Subido':'Pendiente')+
     (e.ba?st(0,1,'Baja registrada',e.mo||''):'')+
     '</div><div class="card"><h3>Siguiente paso</h3><p style="margin:0 0 10px"><b>'+esc(e.pa)+'</b></p><div>'+(e.al||[]).map(function(k){return'<span class="tag '+(AL_R[k]?'r':'a')+'">'+AL[k]+'</span>'}).join('')+'</div><h3 style="margin-top:14px">Simulacro</h3><p style="margin:0">'+(e.si===''||e.si==null?'Sin intentos':'Mejor puntaje: '+esc(e.si))+'</p><h3 style="margin-top:14px">Etapa</h3><p style="margin:0">'+esc(e.et)+'</p></div></div>';
-  h+='<h2>Dudas de este estudiante ('+ds.length+')</h2>'+(ds.length?ds.map(function(d){return'<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+esc(d.te)+'</b><span class="tag '+(d.ab?'a':'')+'">'+esc(d.es)+'</span></div><div class="sub" style="margin:2px 0 6px">'+esc(d.fo)+' · '+esc(d.fe)+'</div><div>'+esc(d.tx)+'</div>'+(d.re?'<div style="margin-top:6px;padding:8px;background:var(--vl);border-radius:8px"><b>Respuesta:</b> '+esc(d.re)+'<div class="sub" style="margin:2px 0 0">'+esc(d.fr||'')+'</div></div>':'')+'</div>'}).join(''):'<div class="card empty">Sin dudas registradas.</div>');
+  h+='<h2>Dudas de este estudiante ('+ds.length+')</h2>'+(ds.length?ds.map(function(d){return'<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+esc(d.te)+'</b>'+badge(d)+'</div><div class="sub" style="margin:2px 0 6px">'+esc(d.fo)+' · '+esc(d.fe)+'</div><div>'+esc(d.tx)+'</div>'+(d.re?'<div style="margin-top:6px;padding:8px;background:var(--vl);border-radius:8px"><b>Respuesta:</b> '+esc(d.re)+'<div class="sub" style="margin:2px 0 0">'+esc(d.fr||'')+(d.dr!==''&&d.dr!=null?' · atendida en '+d.dr+' día(s)':'')+'</div></div>':'')+(P.puedeResponder&&!d.au?'<div style="margin-top:8px"><button class="btn s" onclick="abrirDuda(\''+esc(d.fo)+'\')">'+(d.at?'Ver / reenviar':'Responder')+'</button></div>':'')+'</div>'}).join(''):'<div class="card empty">Sin dudas registradas.</div>');
   return h;
 }
 /* ---------- dudas ---------- */
 function vDudas(){
   if(!full)return'<div class="empty">Sin acceso.</div>';
   var d=P.agg.dudas;
-  var h='<h2 style="margin-top:4px">Dudas</h2><div class="sub">'+nf(d.total)+' recibidas · '+nf(d.abiertas)+' abiertas</div>'+
-    '<div class="tools"><select id="fe" onchange="fillDudas()"><option value="ab">Solo abiertas</option><option value="">Todas</option></select><select id="ft" onchange="fillDudas()"><option value="">Todos los tutores</option>'+P.agg.tutores.map(function(t){return'<option>'+esc(t.tu)+'</option>'}).join('')+'<option>Sin tutor asignado</option></select><input type="search" id="fq" placeholder="Buscar" oninput="fillDudas()"><button class="btn" onclick="dlDudas()">⬇ Descargar Excel</button></div><div id="drows"></div>';
+  var h='<h2 style="margin-top:4px">Dudas</h2><div class="sub">'+nf(d.total)+' recibidas · <b style="color:var(--ok)">'+nf(d.atendidas)+' atendidas ('+d.pctAtendidas+'%)</b> · <b style="color:var(--a)">'+nf(d.abiertas)+' pendientes</b>'+(d.escaladas?' · '+d.escaladas+' escaladas':'')+(d.promDias?' · promedio de atención '+d.promDias+' días':'')+'</div>'+
+    '<div class="tools"><select id="fe" onchange="fillDudas()"><option value="pend">Pendientes</option><option value="esc">Escaladas</option><option value="at">Atendidas</option><option value="">Todas</option></select><select id="ft" onchange="fillDudas()"><option value="">Todos los cohorts</option>'+d.porCohort.map(function(c){return'<option value="'+c.co+'">Cohort '+c.co+'</option>'}).join('')+'</select><input type="search" id="fq" placeholder="Buscar" oninput="fillDudas()"><button class="btn" onclick="dlDudas()">⬇ Descargar Excel</button></div><div id="drows"></div>';
   setTimeout(fillDudas,0);return h;
 }
-function dudasF(){var ab=document.getElementById('fe').value,tu=document.getElementById('ft').value,q=document.getElementById('fq').value.toLowerCase();
-  return P.dudas.filter(function(x){return(!ab||x.ab)&&(!tu||x.tu===tu)&&(!q||(x.no+' '+x.em+' '+x.tx+' '+x.te).toLowerCase().indexOf(q)>=0)}).sort(function(a,b){return b.ab-a.ab||(b.di||0)-(a.di||0)})}
-function fillDudas(){var r=dudasF();document.getElementById('drows').innerHTML=r.length?'<div class="wrap"><table><thead><tr><th>Folio</th><th>Fecha</th><th>Estudiante</th><th>Cohort</th><th>Tutor</th><th>Tema</th><th>Duda</th><th>Estado</th><th class="num">Días</th></tr></thead><tbody>'+r.slice(0,400).map(function(x){var i=P.est.map(function(e){return e.em}).indexOf(x.em);return'<tr class="'+(i>=0?'cl':'')+'"'+(i>=0?' onclick="openEst('+i+')"':'')+'><td>'+esc(x.fo)+'</td><td>'+esc(x.fe)+'</td><td><b>'+esc(x.no)+'</b></td><td>'+x.co+'</td><td>'+esc(x.tu)+'</td><td>'+esc(x.te)+'</td><td>'+esc(x.tx)+(x.re?'<div style="margin-top:4px;color:var(--v)"><b>R:</b> '+esc(x.re)+'</div>':'')+'</td><td><span class="tag '+(x.ab?'a':'')+'">'+esc(x.es)+'</span></td><td class="num">'+(x.ab?x.di:'')+'</td></tr>'}).join('')+'</tbody></table></div>':'<div class="empty">Sin dudas con ese filtro.</div>'}
+function dudasF(){var f=document.getElementById('fe').value,co=document.getElementById('ft').value,q=document.getElementById('fq').value.toLowerCase();
+  return P.dudas.filter(function(x){
+    if(f==='pend'&&!x.ab)return false; if(f==='esc'&&!x.esc)return false; if(f==='at'&&!x.at)return false; if(f===''&&false)return false;
+    if(f!==''&&x.au)return false;
+    return(!co||String(x.co)===co)&&(!q||(x.no+' '+x.em+' '+x.tx+' '+x.te+' '+x.fo).toLowerCase().indexOf(q)>=0)}).sort(function(a,b){return b.ab-a.ab||(b.di||0)-(a.di||0)||String(b.fe).localeCompare(String(a.fe))})}
+function fillDudas(){var r=dudasF();document.getElementById('drows').innerHTML=r.length?'<div class="wrap"><table><thead><tr><th>Folio</th><th>Fecha</th><th>Estudiante</th><th>Cohort</th><th>Tutor asignado</th><th>Tema</th><th>Duda</th><th>Estado</th><th>Respondida</th><th class="num">Días</th></tr></thead><tbody>'+r.slice(0,400).map(function(x){return'<tr class="cl" onclick="abrirDuda(\''+esc(x.fo)+'\')"><td>'+esc(x.fo)+'</td><td>'+esc(x.fe)+'</td><td><b>'+esc(x.no)+'</b></td><td>'+x.co+'</td><td>'+esc(x.tu)+'</td><td>'+esc(x.te)+'</td><td>'+esc(x.tx)+(x.re?'<div style="margin-top:4px;color:var(--v)"><b>R:</b> '+esc(x.re)+'</div>':'')+'</td><td>'+badge(x)+(x.esc&&x.en?'<div style="font-size:12px;color:var(--g)">'+esc(x.en)+'</div>':'')+'</td><td>'+esc(x.at?x.fr:'')+'</td><td class="num">'+(x.at?(x.dr===''?'':x.dr+' (atend.)'):x.ab?x.di:'')+'</td></tr>'}).join('')+'</tbody></table></div>'+(r.length>400?'<div class="note">Se muestran 400 de '+r.length+'. Usa los filtros o descarga el Excel.</div>':''):'<div class="empty">Sin dudas con ese filtro.</div>'}
+/* ---------- ventana de una duda: ver, responder, escalar ---------- */
+function cerrarModal(){var m=document.getElementById('mo');if(m)m.remove()}
+function abrirDuda(fo){
+  var x=P.dudas.filter(function(y){return y.fo===fo})[0];if(!x)return;cerrarModal();
+  var puede=P.puedeResponder&&!x.au,i=P.est.map(function(e){return e.em}).indexOf(x.em);
+  var h='<div id="mo" style="position:fixed;inset:0;background:#0006;z-index:50;overflow:auto;padding:16px" onclick="if(event.target.id===\'mo\')cerrarModal()"><div class="card" style="max-width:720px;margin:20px auto;padding:18px">'+
+   '<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><div><h3 style="margin:0">'+esc(x.no)+'</h3><div class="sub" style="margin:2px 0">'+esc(x.em)+' · Cohort '+x.co+' · Tutor asignado: '+esc(x.tu)+'</div></div><button class="btn s" onclick="cerrarModal()">✕</button></div>'+
+   '<p style="margin:8px 0 2px">'+badge(x)+' <span class="sub">'+esc(x.fo)+' · '+esc(x.fe)+' · '+esc(x.te)+'</span></p>'+
+   '<div style="white-space:pre-wrap;background:#f4f7f6;border-radius:8px;padding:10px;margin:6px 0">'+esc(x.tx)+'</div>';
+  if(x.at)h+='<div style="background:var(--vl);border-radius:8px;padding:10px;margin:6px 0"><b>Respuesta enviada</b> <span class="sub">'+esc(x.fr||'')+(x.dr!==''&&x.dr!=null?' · atendida en '+x.dr+' día(s)':'')+'</span><div style="white-space:pre-wrap;margin-top:4px">'+esc(x.re)+'</div></div>';
+  if(x.esc&&x.en)h+='<p class="sub">Nota de escalada: '+esc(x.en)+'</p>';
+  if(puede){
+    h+='<h3 style="margin-top:14px">'+(x.at?'Enviar otra respuesta':'Tu respuesta')+'</h3><textarea id="rt" rows="6" style="width:100%;padding:10px;border:1px solid #cfd8d5;border-radius:8px;font:inherit" placeholder="Escribe aquí tu respuesta. Al estudiante le llegará con su duda citada debajo."></textarea>'+
+     '<div class="tools"><button class="btn" onclick="vistaPrevia(\''+esc(x.fo)+'\')">Vista previa</button>'+(x.ab?'<span style="flex:1"></span>'+(x.esc?'<button class="btn s" onclick="escalarDuda(\''+esc(x.fo)+'\',true)">Quitar escalada</button>':'<input type="text" id="en" placeholder="Nota para coordinación (opcional)" style="min-width:200px"><button class="btn s" onclick="escalarDuda(\''+esc(x.fo)+'\')">Escalar a coordinación</button>'):'')+'</div><div id="prev"></div>';
+  }
+  if(i>=0)h+='<div class="tools"><button class="btn s" onclick="cerrarModal();openEst('+i+')">Ver al estudiante</button></div>';
+  document.body.insertAdjacentHTML('beforeend',h+'<div id="mmsg" class="note"></div></div></div>');
+}
+function msgModal(t,bad){var m=document.getElementById('mmsg');if(m){m.style.color=bad?'var(--r)':'var(--ok)';m.textContent=t}}
+function vistaPrevia(fo){
+  var t=document.getElementById('rt').value;if(t.trim().length<5)return msgModal('Escribe tu respuesta (mínimo 5 caracteres).',1);
+  msgModal('Preparando vista previa…');
+  api('responder',{token:SES.token,folio:fo,texto:t,modo:'vista'}).then(function(j){
+    if(!j.ok)return msgModal(j.error,1);msgModal('');
+    document.getElementById('prev').innerHTML='<div style="border:1px solid var(--l);border-radius:8px;padding:10px;margin-top:8px"><div class="sub" style="margin:0">Se enviará a <b>'+esc(j.para)+'</b> desde tutor.cpfia1@infotec.mx</div><div style="margin:4px 0"><b>Asunto:</b> '+esc(j.asunto)+'</div><pre style="white-space:pre-wrap;font:inherit;margin:0;background:#f4f7f6;border-radius:8px;padding:10px">'+esc(j.cuerpo)+'</pre>'+
+     (j.yaRespondida?'<label style="display:block;margin-top:8px"><input type="checkbox" id="otra"> Esta duda ya fue respondida; quiero enviar otra respuesta.</label>':'')+
+     '<div class="tools"><button class="btn s" onclick="enviarDuda(\''+esc(fo)+'\',\'prueba\')">Enviarme una prueba</button><button class="btn" onclick="enviarDuda(\''+esc(fo)+'\',\'enviar\')">Confirmar y enviar al estudiante</button></div></div>';
+  });
+}
+function enviarDuda(fo,modo){
+  var t=document.getElementById('rt').value,o=document.getElementById('otra');
+  msgModal(modo==='prueba'?'Enviando prueba…':'Enviando…');
+  api('responder',{token:SES.token,folio:fo,texto:t,modo:modo,confirmarOtra:!!(o&&o.checked)}).then(function(j){
+    if(!j.ok)return msgModal(j.error,1);
+    if(modo==='prueba')return msgModal(j.mensaje);
+    msgModal(j.mensaje);recargar();
+  });
+}
+function escalarDuda(fo,quitar){
+  var n=document.getElementById('en');msgModal('Guardando…');
+  api('escalar',{token:SES.token,folio:fo,nota:n?n.value:'',quitar:!!quitar}).then(function(j){if(!j.ok)return msgModal(j.error,1);msgModal(j.mensaje);recargar()});
+}
+/** Trae de nuevo los datos y deja la pantalla donde estaba. */
+function recargar(){api('panel',{token:SES.token}).then(function(j){if(!j.ok||j.denegado)return;P=j;full=j.rol==='Completo';setTimeout(function(){cerrarModal();render()},900)})}
 /* ---------- descargas ---------- */
 function vDesc(){
   if(!full)return'<div class="empty">Sin acceso.</div>';
@@ -227,8 +284,8 @@ function vDesc(){
 /* ---------- exportación ---------- */
 var HDR=['Cohort','Tutor','Nombre','Correo','Etapa','Siguiente paso','Alertas','Ingresos','Último acceso','Días sin acceso','Constancia curso','Voucher','Voucher canjeado','Fecha de examen','Resultado','Certificado oficial','Constancia NETEC','Simulacro (mejor)','Dudas','Motivo baja'];
 function fila(e){return[e.co,e.tu,e.no,e.em,e.et,e.pa,(e.al||[]).map(function(k){return AL[k]}).join('; '),e.ig,e.ua||'',e.ds,e.cu?'Sí':'No',e.vo||'',e.ca?'Sí':'No',e.fe||'',e.re||'',e.ce?'Sí':'No',e.ne?'Sí':'No',e.si===''||e.si==null?'':e.si,e.du||0,e.mo||'']}
-var DH=['Folio','Fecha','Cohort','Tutor','Estudiante','Correo','Tema','Duda','Estado','Días abierta','Respuesta','Fecha respuesta'];
-function dfila(x){return[x.fo,x.fe,x.co,x.tu,x.no,x.em,x.te,x.tx,x.es,x.ab?x.di:'',x.re||'',x.fr||'']}
+var DH=['Folio','Fecha','Cohort','Tutor asignado','Estudiante','Correo','Tema','Duda','Estado','Atendida','Fecha de respuesta','Días de atención','Días pendiente','Respuesta','Nota de escalada'];
+function dfila(x){return[x.fo,x.fe,x.co,x.tu,x.no,x.em,x.te,x.tx,estadoDuda(x)[0].replace('✓ ',''),x.at?'Sí':(x.au?'N/A':'No'),x.at?x.fr:'',x.at&&x.dr!==''?x.dr:'',x.ab?x.di:'',x.re||'',x.en||'']}
 function fecha(){return new Date().toISOString().slice(0,10)}
 function safe(s){return String(s).replace(/[^\wáéíóúñÁÉÍÓÚÑ -]+/g,'').replace(/\s+/g,'_').slice(0,50)}
 function guardar(wb,nombre){
