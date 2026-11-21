@@ -48,8 +48,8 @@ svg text{font-family:inherit}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 var P=null,full=false,S={v:'gen',tu:null,co:null,m:null,q:'',ord:null,est:null,cache:{}};
-var LB={Sin_ingreso:'Nunca han entrado',Sin_actividad:'Sin actividad reciente',Curso_pendiente:'Curso pendiente',Curso_entregado:'Curso entregado',Voucher_pendiente:'Voucher pendiente',Voucher_recibido:'Voucher recibido',Voucher_canjeado:'Voucher canjeado',Sin_fecha_examen:'Sin fecha de examen',Examen_programado:'Examen programado',Resultado_pendiente:'Resultado pendiente',Aprobaron:'Aprobaron',No_aprobaron:'No aprobaron',Falta_certificado:'Falta certificado',Certificado_oficial:'Certificado oficial',Bajas:'Bajas'};
-var DESC={Sin_ingreso:'Nunca han entrado al sitio.',Sin_actividad:'Llevan varios días sin entrar.',Curso_pendiente:'No han subido la constancia del curso.',Curso_entregado:'Ya subieron la constancia del curso.',Voucher_pendiente:'Curso entregado, sin voucher recibido o canjeado.',Voucher_recibido:'Dicen haberlo recibido, o ya lo canjearon.',Voucher_canjeado:'Subieron el correo de Pearson VUE.',Sin_fecha_examen:'Curso entregado, sin fecha de examen.',Examen_programado:'Con fecha y sin resultado.',Resultado_pendiente:'Su examen ya pasó, sin resultado.',Aprobaron:'Aprobaron el examen.',No_aprobaron:'No aprobaron el examen.',Falta_certificado:'Aprobaron, falta su certificado oficial.',Certificado_oficial:'Ya subieron su certificado.',Bajas:'Registraron que no certificarán.'};
+var LB={Sin_ingreso:'Nunca han entrado',Sin_actividad:'Sin actividad reciente',Curso_pendiente:'Curso pendiente',Curso_entregado:'Curso entregado',Voucher_pendiente:'Voucher pendiente',Voucher_recibido:'Voucher recibido',Voucher_canjeado:'Voucher canjeado',Sin_fecha_examen:'Sin fecha de examen',Examen_programado:'Examen programado',Resultado_pendiente:'Resultado pendiente',Aprobaron:'Aprobaron',No_aprobaron:'No aprobaron',Falta_certificado:'Falta certificado',Certificado_oficial:'Certificado oficial',Netec_enviado:'Voucher enviado por NETEC',Netec_confirmado:'Voucher de NETEC confirmado',Bajas:'Bajas'};
+var DESC={Sin_ingreso:'Nunca han entrado al sitio.',Sin_actividad:'Llevan varios días sin entrar.',Curso_pendiente:'No han subido la constancia del curso.',Curso_entregado:'Ya subieron la constancia del curso.',Voucher_pendiente:'Curso entregado, sin voucher recibido o canjeado.',Voucher_recibido:'Dicen haberlo recibido, o ya lo canjearon.',Voucher_canjeado:'Subieron el correo de Pearson VUE.',Sin_fecha_examen:'Curso entregado, sin fecha de examen.',Examen_programado:'Con fecha y sin resultado.',Resultado_pendiente:'Su examen ya pasó, sin resultado.',Aprobaron:'Aprobaron el examen.',No_aprobaron:'No aprobaron el examen.',Falta_certificado:'Aprobaron, falta su certificado oficial.',Certificado_oficial:'Ya subieron su certificado.',Netec_enviado:'NETEC ya les envió su voucher (según el Sheet de NETEC).',Netec_confirmado:'NETEC envió su voucher y el estudiante confirmó que lo recibió.',Bajas:'Registraron que no certificarán.'};
 var AL={nunca:'Nunca han entrado',sinacceso:'Sin acceso reciente',sinvoucher:'Voucher: dijo que aún no',sinfecha:'Curso listo, sin fecha de examen',pasado:'Examen pasado sin resultado',faltacert:'Aprobó, falta certificado',duda:'Con duda abierta'};
 var AL_ORD=['nunca','sinacceso','sinvoucher','sinfecha','pasado','faltacert','duda'];
 var AL_R={pasado:1,duda:1,nunca:1};
@@ -77,7 +77,7 @@ function pred(m){ // m: {s:'tot'|'li'|'al',k:key}
 function mval(x,m){return(x[m.s]||{})[m.k]||0}
 function mlabel(m){return m.s==='li'?LB[m.k]:m.s==='al'?AL[m.k]:TOTLB[m.k]}
 /* ---------- navegación ---------- */
-function go(o){for(var k in o)S[k]=o[k];S.q='';S.ord=null;render()}
+function go(o){if(o.v==='dudas'&&!('fd' in o))S.fd=null;for(var k in o)S[k]=o[k];S.q='';S.ord=null;render()}
 function crumbs(){
   var h=['<a onclick="go({v:\'gen\',tu:null,co:null,m:null})">General</a>'];
   var sep='<span class="sep">›</span>';
@@ -102,9 +102,8 @@ function vScope(){
   if(S.v==='gen'){
     h+='<div class="tools"><button class="btn s" onclick="location.reload()">↻ Recargar</button>'+(full?'<button class="btn s" onclick="go({v:\'dudas\'})">Dudas</button><button class="btn" onclick="go({v:\'desc\'})">⬇ Descargas</button>':'')+'</div>';
   }
-  h+='<div class="grid k">'+FUN.slice(0,1).concat([['nap','No aprobaron'],['baja','Bajas']]).map(function(f){return kpi(t,f,'tot')}).join('')+'</div>';
+  h+='<div class="grid k">'+[['tot','n','Registrados'],['tot','apr','Aprobaron'],['li','Examen_programado','Con fecha de examen programada'],['li','Resultado_pendiente','Su fecha de examen ya pasó y no han registrado resultado'],['li','Netec_enviado','Voucher enviado por NETEC'],['li','Netec_confirmado','Confirmaron que recibieron el voucher de NETEC'],['tot','nap','No aprobaron'],['tot','baja','Bajas']].map(function(f){return kpi2(a,t,f)}).join('')+'</div>';
   h+='<h2>Embudo hacia la certificación</h2><div class="card">'+funnel(t)+'</div>';
-  h+='<h2>Requieren atención</h2><div class="grid k">'+AL_ORD.map(function(k){var n=a.al[k]||0;return'<div class="card kpi al '+(n===0?'z':AL_R[k]?'r':'')+'" onclick="go({v:\'metric\',m:{s:\'al\',k:\''+k+'\'}})"><div class="n">'+nf(n)+'</div><div class="t">'+AL[k]+'</div></div>'}).join('')+'</div>';
   if(S.v==='gen'||S.tu==null||S.co==null){
     h+='<h2>'+(S.v==='gen'?'Por tutor':S.co==null?'Cohorts de '+esc(S.tu||''):'')+'</h2>';
     if(S.v==='gen')h+=tabla(P.agg.tutores.map(function(x){return{n:x.tu,sub:x.cohorts.length+' cohorts',t:x.tot,a:x.al,go:'go({v:\'scope\',tu:'+q(x.tu)+',co:null,m:null})'}}),'Tutor');
@@ -119,6 +118,7 @@ function vScope(){
   return h;
 }
 function q(s){return"'"+String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'")+"'"}
+function kpi2(a,t,f){var n=f[0]==='tot'?(t[f[1]]||0):((a.li||{})[f[1]]||0);return'<div class="card kpi" onclick="go({v:\'metric\',m:{s:\''+f[0]+'\',k:\''+f[1]+'\'}})"><div class="n">'+nf(n)+'</div><div class="t">'+f[2]+'</div>'+(f[1]!=='n'&&f[1]!=='nap'&&f[1]!=='baja'?'<div class="p">'+pc(n,t.n)+' de registrados</div>':'')+'</div>'}
 function kpi(t,f,s){var n=t[f[0]]||0;return'<div class="card kpi" onclick="go({v:\'metric\',m:{s:\''+s+'\',k:\''+f[0]+'\'}})"><div class="n">'+nf(n)+'</div><div class="t">'+f[1]+'</div>'+(f[0]!=='n'&&f[0]!=='nap'&&f[0]!=='baja'?'<div class="p">'+pc(n,t.n)+' de registrados</div>':'')+'</div>'}
 function funnel(t){var mx=t.n||1;return FUN.map(function(f){var n=t[f[0]]||0;return'<div class="bar" onclick="go({v:\'metric\',m:{s:\'tot\',k:\''+f[0]+'\'}})"><div class="lb">'+f[1]+'</div><div class="tr"><div class="fi" style="width:'+(n*100/mx)+'%"></div></div><div class="vv"><b>'+nf(n)+'</b> · '+pc(n,t.n)+'</div></div>'}).join('')}
 function tabla(rows,col){
@@ -151,16 +151,11 @@ function estadoDuda(x){return x.au?['Registro automático','']:x.at?['✓ Atendi
 function badge(x){var e=estadoDuda(x);return'<span class="tag '+e[1]+'">'+e[0]+'</span>'}
 function dudasResumen(){
   var d=P.agg.dudas;
-  var h='<h2>Atención a las dudas</h2><div class="sub">Las dudas enviadas desde el sitio las atiende la tutoría. “Tutor asignado” es solo el del estudiante.</div><div class="grid k">'+
-   '<div class="card kpi nc"><div class="n">'+nf(d.total)+'</div><div class="t">Recibidas</div></div>'+
-   '<div class="card kpi nc al '+(d.total&&d.atendidas===d.total?'z':'')+'"><div class="n" style="color:var(--ok)">'+nf(d.atendidas)+'</div><div class="t">Atendidas · '+(d.total?d.pctAtendidas+'%':'—')+'</div></div>'+
-   '<div class="card kpi nc al '+(d.abiertas?'':'z')+'"><div class="n">'+nf(d.abiertas)+'</div><div class="t">Pendientes</div></div>'+
-   '<div class="card kpi nc"><div class="n">'+nf(d.escaladas||0)+'</div><div class="t">Escaladas a coordinación</div></div>'+
-   '<div class="card kpi nc"><div class="n">'+(d.promDias||0)+'</div><div class="t">Días promedio de atención</div></div>'+
-   '<div class="card kpi nc"><div class="n">'+(d.masVieja||0)+'</div><div class="t">Días de la pendiente más antigua</div></div></div>';
-  if(d.porTema.length){var pc2=d.porCohort.filter(function(x){return x.a>0}).sort(function(a,b){return b.a-a.a}).slice(0,10);
-    h+='<div class="grid g2" style="margin-top:10px"><div class="card"><h3>Por tema</h3>'+d.porTema.slice(0,8).map(function(x){return'<div class="bar nc"><div class="lb">'+esc(x.te)+'</div><div class="tr"><div class="fi" style="width:'+(x.n*100/d.porTema[0].n)+'%"></div></div><div class="vv">'+x.n+(x.a?' · <span style="color:var(--a)">'+x.a+' pend.</span>':' · <span style="color:var(--ok)">al día</span>')+'</div></div>'}).join('')+'</div>'+
-    '<div class="card"><h3>Cohorts con más pendientes</h3>'+(pc2.length?pc2.map(function(x){return'<div class="bar nc"><div class="lb">Cohort '+x.co+'</div><div class="tr"><div class="fi" style="width:'+(x.a*100/pc2[0].a)+'%;background:#e0a23b"></div></div><div class="vv">'+x.a+' de '+x.n+'</div></div>'}).join(''):'<div class="empty">Sin dudas pendientes.</div>')+'</div></div>';}
+  var c=function(fd){return full?' onclick="go({v:\'dudas\',fd:\''+fd+'\'})"':''},cl=full?'':' nc';
+  var h='<h2>Atención a las dudas</h2><div class="sub">Las dudas enviadas desde el sitio las atiende la tutoría.'+(full?' Da clic en una cifra para ver el detalle.':'')+'</div><div class="grid k">'+
+   '<div class="card kpi'+cl+'"'+c('')+'><div class="n">'+nf(d.total)+'</div><div class="t">Recibidas</div></div>'+
+   '<div class="card kpi'+cl+' al '+(d.total&&d.atendidas===d.total?'z':'')+'"'+c('at')+'><div class="n" style="color:var(--ok)">'+nf(d.atendidas)+'</div><div class="t">Atendidas · '+(d.total?d.pctAtendidas+'%':'—')+'</div></div>'+
+   '<div class="card kpi'+cl+' al '+(d.abiertas?'':'z')+'"'+c('pend')+'><div class="n">'+nf(d.abiertas)+'</div><div class="t">Pendientes</div></div></div>';
   if(full)h+='<div class="tools"><button class="btn s" onclick="go({v:\'dudas\'})">Ver, responder y descargar las dudas</button></div>';
   return h;
 }
@@ -220,7 +215,7 @@ function vDudas(){
   var d=P.agg.dudas;
   var h='<h2 style="margin-top:4px">Dudas</h2><div class="sub">'+nf(d.total)+' recibidas · <b style="color:var(--ok)">'+nf(d.atendidas)+' atendidas ('+d.pctAtendidas+'%)</b> · <b style="color:var(--a)">'+nf(d.abiertas)+' pendientes</b>'+(d.escaladas?' · '+d.escaladas+' escaladas':'')+(d.promDias?' · promedio de atención '+d.promDias+' días':'')+'</div>'+
     '<div class="tools"><select id="fe" onchange="fillDudas()"><option value="pend">Pendientes</option><option value="esc">Escaladas</option><option value="at">Atendidas</option><option value="">Todas</option></select><select id="ft" onchange="fillDudas()"><option value="">Todos los cohorts</option>'+d.porCohort.map(function(c){return'<option value="'+c.co+'">Cohort '+c.co+'</option>'}).join('')+'</select><input type="search" id="fq" placeholder="Buscar" oninput="fillDudas()"><button class="btn" onclick="dlDudas()">⬇ Descargar Excel</button></div><div id="drows"></div>';
-  setTimeout(fillDudas,0);return h;
+  setTimeout(function(){var e=document.getElementById('fe');if(e)e.value=S.fd==null?'pend':S.fd;fillDudas()},0);return h;
 }
 function dudasF(){var f=document.getElementById('fe').value,co=document.getElementById('ft').value,q=document.getElementById('fq').value.toLowerCase();
   return P.dudas.filter(function(x){
@@ -311,7 +306,7 @@ function libroTutor(t){
   var res=[['Resumen',['Concepto','Estudiantes'],[['Tutor',t],['Generado',fecha()+' (datos: '+P.actualizado+')'],['Registrados',E.length],['Con alertas',E.filter(function(e){return(e.al||[]).length}).length]].concat(Object.keys(LB).map(function(k){return[LB[k],por(k).length]}))]];
   res.push(['Todos',HDR,E.map(fila)]);
   res.push(['Con alertas',HDR,E.filter(function(e){return(e.al||[]).length}).map(fila)]);
-  ['Sin_ingreso','Sin_actividad','Curso_pendiente','Voucher_pendiente','Sin_fecha_examen','Examen_programado','Resultado_pendiente','No_aprobaron','Falta_certificado','Aprobaron','Certificado_oficial','Bajas'].forEach(function(k){res.push([LB[k],HDR,por(k)])});
+  ['Sin_ingreso','Sin_actividad','Curso_pendiente','Voucher_pendiente','Sin_fecha_examen','Examen_programado','Resultado_pendiente','No_aprobaron','Falta_certificado','Aprobaron','Certificado_oficial','Netec_enviado','Netec_confirmado','Bajas'].forEach(function(k){res.push([LB[k],HDR,por(k)])});
   res.push(['Dudas',DH,D.map(dfila)]);
   return libro(res);
 }
