@@ -111,7 +111,7 @@ function vScope(){
     if(S.co==null){h+='<h2>'+(S.v==='gen'?'Por cohort':'')+'</h2>'+tabla(cs.map(function(x){return{n:'Cohort '+x.c,sub:x.tu,t:x.tot,a:x.al,go:'go({v:\'scope\',tu:'+q(S.tu==null?x.tu:S.tu)+',co:'+x.c+',m:null})'}}),'Cohort')}
   }
   if(S.v==='gen'){
-    h+='<div class="grid g2"><div><h2>Avance en el tiempo</h2><div class="card">'+trend()+'</div></div><div><h2>Exámenes programados por semana</h2><div class="card">'+semanas()+'</div></div></div>';
+    h+='<h2>Exámenes programados por semana</h2><div class="card">'+semanas()+'</div>';
     h+=dudasResumen();
   }
   if(full&&S.v==='scope'){h+='<div class="tools" style="margin-top:14px"><button class="btn" onclick="go({v:\'lista\',m:{s:\'tot\',k:\'n\'}})">Ver a todos los estudiantes de este ámbito ('+nf(t.n)+')</button></div>'}
@@ -124,8 +124,8 @@ function funnel(t){var mx=t.n||1;return FUN.map(function(f){var n=t[f[0]]||0;ret
 function tabla(rows,col){
   if(!rows.length)return'<div class="card empty">Sin datos</div>';
   var cols=[['n','Registrados'],['curso','Curso'],['can','Voucher canj.'],['fecha','Con fecha'],['apr','Aprobaron'],['cert','Certificado']];
-  var h='<div class="wrap"><table><thead><tr><th>'+col+'</th>'+cols.map(function(c){return'<th class="num">'+c[1]+'</th>'}).join('')+'<th class="num">% cert.</th></tr></thead><tbody>';
-  rows.forEach(function(r){    h+='<tr class="cl" onclick="'+r.go+'"><td><b>'+esc(r.n)+'</b>'+(r.sub?'<div class="p" style="color:var(--g);font-size:12px">'+esc(r.sub)+'</div>':'')+'</td>'+cols.map(function(c){return'<td class="num">'+nf(r.t[c[0]])+'</td>'}).join('')+'<td class="num">'+pc(r.t.cert,r.t.n)+'</td></tr>'});
+  var h='<div class="wrap"><table><thead><tr><th>'+col+'</th>'+cols.map(function(c){return'<th class="num">'+c[1]+'</th>'}).join('')+'</tr></thead><tbody>';
+  rows.forEach(function(r){    h+='<tr class="cl" onclick="'+r.go+'"><td><b>'+esc(r.n)+'</b>'+(r.sub?'<div class="p" style="color:var(--g);font-size:12px">'+esc(r.sub)+'</div>':'')+'</td>'+cols.map(function(c){return'<td class="num">'+nf(r.t[c[0]])+'</td>'}).join('')+'</tr>'});
   return h+'</tbody></table></div>';
 }
 /* ---------- gráficas ---------- */
@@ -183,16 +183,20 @@ function vLista(){
   setTimeout(fillRows,0);return h;
 }
 function fillRows(){
-  var el=document.getElementById('rows');if(!el)return;var r=rowsQ(filt()).slice().sort(ordFn());
+  var el=document.getElementById('rows');if(!el)return;var r=rowsQ(filt()).slice().sort(ordFn()),sinDias=S.m&&S.m.s==='li'&&S.m.k==='Certificado_oficial';
   var show=r.slice(0,400);
   var th=function(k,l,c){return'<th class="'+(c||'')+'" style="cursor:pointer" onclick="S.ord=\''+k+'\';fillRows()">'+l+'</th>'};
-  el.innerHTML=r.length?'<div class="wrap"><table><thead><tr>'+th('co','Cohort')+th('tu','Tutor')+th('no','Estudiante')+th('et','Etapa')+th('ds','Días sin acceso','num')+th('fe','Fecha examen')+'<th>Siguiente paso</th></tr></thead><tbody>'+show.map(function(e){return'<tr class="cl" onclick="openEst('+P.est.indexOf(e)+')"><td>'+e.co+'</td><td>'+esc(e.tu)+'</td><td><b>'+esc(e.no)+'</b><div style="color:var(--g);font-size:12px">'+esc(e.em)+'</div></td><td>'+esc(e.et)+'</td><td class="num">'+(e.ds===''?'—':e.ds)+'</td><td>'+esc(e.fe||'')+'</td><td>'+esc(e.pa)+'</td></tr>'}).join('')+'</tbody></table></div>'+(r.length>400?'<div class="note">Se muestran 400 de '+r.length+'. Usa la búsqueda o descarga el Excel completo.</div>':''):'<div class="empty">Sin resultados.</div>';
+  el.innerHTML=r.length?'<div class="wrap"><table><thead><tr>'+th('co','Cohort')+th('tu','Tutor')+th('no','Estudiante')+th('et','Etapa')+(sinDias?'':th('ds','Días sin acceso','num'))+th('fe','Fecha examen')+'<th>Siguiente paso</th></tr></thead><tbody>'+show.map(function(e){return'<tr class="cl" onclick="openEst('+P.est.indexOf(e)+')"><td>'+e.co+'</td><td>'+esc(e.tu)+'</td><td><b>'+esc(e.no)+'</b><div style="color:var(--g);font-size:12px">'+esc(e.em)+'</div></td><td>'+esc(e.et)+'</td>'+(sinDias?'':'<td class="num">'+(e.ds===''?'—':e.ds)+'</td>')+'<td>'+esc(e.fe||'')+'</td><td>'+esc(e.pa)+'</td></tr>'}).join('')+'</tbody></table></div>'+(r.length>400?'<div class="note">Se muestran 400 de '+r.length+'. Usa la búsqueda o descarga el Excel completo.</div>':''):'<div class="empty">Sin resultados.</div>';
 }
 function ordFn(){var k=S.ord;if(!k)return function(a,b){return a.co-b.co||String(a.no).localeCompare(String(b.no))};return function(a,b){var x=a[k],y=b[k];if(x===''||x==null)return 1;if(y===''||y==null)return-1;return typeof x==='number'?(k==='ds'?y-x:x-y):String(x).localeCompare(String(y))}}
 function openEst(i){S.est=P.est[i];S.v='est';render()}
 /* ---------- estudiante ---------- */
+function docs(e){
+  function d(t,id,vacio){return'<div style="margin-bottom:14px"><b>'+t+'</b>'+(id?' <a class="btn s" style="text-decoration:none;display:inline-block;margin-left:8px;padding:4px 10px;font-size:13px" target="_blank" rel="noopener" href="https://drive.google.com/file/d/'+encodeURIComponent(id)+'/view">Abrir en otra pestaña</a><iframe src="https://drive.google.com/file/d/'+encodeURIComponent(id)+'/preview" style="width:100%;height:380px;border:1px solid var(--l);border-radius:8px;margin-top:8px" loading="lazy"></iframe>':'<div style="color:var(--g);font-size:13px">'+vacio+'</div>')+'</div>'}
+  return d('Certificado oficial AWS',e.dg,'Aún no lo ha subido.')+d('Constancia del curso (Skill Builder)',e.dc,'Aún no la ha subido.')+'<div class="note">Si no se muestra, abre el documento en otra pestaña con tu cuenta de INFOTEC.</div>';
+}
 function vEst(){
-  var e=S.est,ds=P.dudas.filter(function(d){return d.em===e.em});
+  var e=S.est;
   function st(ok,no,t,d){return'<div class="step"><div class="dot '+(ok?'ok':no?'no':'')+'">'+(ok?'✓':no?'✕':'')+'</div><div><b>'+t+'</b><div style="color:var(--g);font-size:13px">'+esc(d||'')+'</div></div></div>'}
   var res=e.re;
   var h='<h2 style="margin-top:4px">'+esc(e.no)+'</h2><div class="sub">'+esc(e.em)+' · Cohort '+e.co+' · Tutor: '+esc(e.tu)+'</div>';
@@ -204,8 +208,7 @@ function vEst(){
     st(res==='Aprobatorio',res==='No aprobatorio','Resultado del examen',res||'Sin resultado')+
     st(e.ce,0,'Certificado oficial AWS',e.ce?'Subido':'Pendiente')+
     (e.ba?st(0,1,'Baja registrada',e.mo||''):'')+
-    '</div><div class="card"><h3>Siguiente paso</h3><p style="margin:0 0 10px"><b>'+esc(e.pa)+'</b></p><h3 style="margin-top:14px">Simulacro</h3><p style="margin:0">'+(e.si===''||e.si==null?'Sin intentos':'Mejor puntaje: '+esc(e.si))+'</p><h3 style="margin-top:14px">Etapa</h3><p style="margin:0">'+esc(e.et)+'</p></div></div>';
-  h+='<h2>Dudas de este estudiante ('+ds.length+')</h2>'+(ds.length?ds.map(function(d){return'<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+esc(d.te)+'</b>'+badge(d)+'</div><div class="sub" style="margin:2px 0 6px">'+esc(d.fo)+' · '+esc(d.fe)+'</div><div>'+esc(d.tx)+'</div>'+(d.re?'<div style="margin-top:6px;padding:8px;background:var(--vl);border-radius:8px"><b>Respuesta:</b> '+esc(d.re)+'<div class="sub" style="margin:2px 0 0">'+esc(d.fr||'')+(d.dr!==''&&d.dr!=null?' · atendida en '+d.dr+' día(s)':'')+'</div></div>':'')+(P.puedeResponder&&!d.au?'<div style="margin-top:8px"><button class="btn s" onclick="abrirDuda(\''+esc(d.fo)+'\')">'+(d.at?'Ver / reenviar':'Responder')+'</button></div>':'')+'</div>'}).join(''):'<div class="card empty">Sin dudas registradas.</div>');
+    '</div><div class="card"><h3>Documentos</h3>'+docs(e)+'</div></div>';
   return h;
 }
 /* ---------- dudas ---------- */
