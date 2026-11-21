@@ -118,15 +118,14 @@ function vScope(){
   return h;
 }
 function q(s){return"'"+String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'")+"'"}
-function kpi2(a,t,f){var n=f[0]==='tot'?(t[f[1]]||0):((a.li||{})[f[1]]||0);return'<div class="card kpi" onclick="go({v:\'metric\',m:{s:\''+f[0]+'\',k:\''+f[1]+'\'}})"><div class="n">'+nf(n)+'</div><div class="t">'+f[2]+'</div>'+(f[1]!=='n'&&f[1]!=='nap'&&f[1]!=='baja'?'<div class="p">'+pc(n,t.n)+' de registrados</div>':'')+'</div>'}
+function kpi2(a,t,f){var n=f[0]==='tot'?(t[f[1]]||0):((a.li||{})[f[1]]||0);return'<div class="card kpi" onclick="go({v:\'metric\',m:{s:\''+f[0]+'\',k:\''+f[1]+'\'}})"><div class="n">'+nf(n)+'</div><div class="t">'+f[2]+'</div>'+'</div>'}
 function kpi(t,f,s){var n=t[f[0]]||0;return'<div class="card kpi" onclick="go({v:\'metric\',m:{s:\''+s+'\',k:\''+f[0]+'\'}})"><div class="n">'+nf(n)+'</div><div class="t">'+f[1]+'</div>'+(f[0]!=='n'&&f[0]!=='nap'&&f[0]!=='baja'?'<div class="p">'+pc(n,t.n)+' de registrados</div>':'')+'</div>'}
 function funnel(t){var mx=t.n||1;return FUN.map(function(f){var n=t[f[0]]||0;return'<div class="bar" onclick="go({v:\'metric\',m:{s:\'tot\',k:\''+f[0]+'\'}})"><div class="lb">'+f[1]+'</div><div class="tr"><div class="fi" style="width:'+(n*100/mx)+'%"></div></div><div class="vv"><b>'+nf(n)+'</b> · '+pc(n,t.n)+'</div></div>'}).join('')}
 function tabla(rows,col){
   if(!rows.length)return'<div class="card empty">Sin datos</div>';
   var cols=[['n','Registrados'],['curso','Curso'],['can','Voucher canj.'],['fecha','Con fecha'],['apr','Aprobaron'],['cert','Certificado']];
-  var h='<div class="wrap"><table><thead><tr><th>'+col+'</th>'+cols.map(function(c){return'<th class="num">'+c[1]+'</th>'}).join('')+'<th class="num">% cert.</th><th class="num">Alertas</th></tr></thead><tbody>';
-  rows.forEach(function(r){var al=0;for(var k in r.a)if(k!=='duda')al+=r.a[k]; al=Object.keys(r.a).reduce(function(s,k){return s+(r.a[k]||0)},0);
-    h+='<tr class="cl" onclick="'+r.go+'"><td><b>'+esc(r.n)+'</b>'+(r.sub?'<div class="p" style="color:var(--g);font-size:12px">'+esc(r.sub)+'</div>':'')+'</td>'+cols.map(function(c){return'<td class="num">'+nf(r.t[c[0]])+'</td>'}).join('')+'<td class="num">'+pc(r.t.cert,r.t.n)+'</td><td class="num">'+(al?'<span class="tag a">'+nf(al)+'</span>':'0')+'</td></tr>'});
+  var h='<div class="wrap"><table><thead><tr><th>'+col+'</th>'+cols.map(function(c){return'<th class="num">'+c[1]+'</th>'}).join('')+'<th class="num">% cert.</th></tr></thead><tbody>';
+  rows.forEach(function(r){    h+='<tr class="cl" onclick="'+r.go+'"><td><b>'+esc(r.n)+'</b>'+(r.sub?'<div class="p" style="color:var(--g);font-size:12px">'+esc(r.sub)+'</div>':'')+'</td>'+cols.map(function(c){return'<td class="num">'+nf(r.t[c[0]])+'</td>'}).join('')+'<td class="num">'+pc(r.t.cert,r.t.n)+'</td></tr>'});
   return h+'</tbody></table></div>';
 }
 /* ---------- gráficas ---------- */
@@ -187,7 +186,7 @@ function fillRows(){
   var el=document.getElementById('rows');if(!el)return;var r=rowsQ(filt()).slice().sort(ordFn());
   var show=r.slice(0,400);
   var th=function(k,l,c){return'<th class="'+(c||'')+'" style="cursor:pointer" onclick="S.ord=\''+k+'\';fillRows()">'+l+'</th>'};
-  el.innerHTML=r.length?'<div class="wrap"><table><thead><tr>'+th('co','Cohort')+th('tu','Tutor')+th('no','Estudiante')+th('et','Etapa')+th('ds','Días sin acceso','num')+th('fe','Fecha examen')+'<th>Alertas</th><th>Siguiente paso</th></tr></thead><tbody>'+show.map(function(e){return'<tr class="cl" onclick="openEst('+P.est.indexOf(e)+')"><td>'+e.co+'</td><td>'+esc(e.tu)+'</td><td><b>'+esc(e.no)+'</b><div style="color:var(--g);font-size:12px">'+esc(e.em)+'</div></td><td>'+esc(e.et)+'</td><td class="num">'+(e.ds===''?'—':e.ds)+'</td><td>'+esc(e.fe||'')+'</td><td>'+(e.al||[]).map(function(k){return'<span class="tag '+(AL_R[k]?'r':'a')+'">'+AL[k]+'</span>'}).join('')+'</td><td>'+esc(e.pa)+'</td></tr>'}).join('')+'</tbody></table></div>'+(r.length>400?'<div class="note">Se muestran 400 de '+r.length+'. Usa la búsqueda o descarga el Excel completo.</div>':''):'<div class="empty">Sin resultados.</div>';
+  el.innerHTML=r.length?'<div class="wrap"><table><thead><tr>'+th('co','Cohort')+th('tu','Tutor')+th('no','Estudiante')+th('et','Etapa')+th('ds','Días sin acceso','num')+th('fe','Fecha examen')+'<th>Siguiente paso</th></tr></thead><tbody>'+show.map(function(e){return'<tr class="cl" onclick="openEst('+P.est.indexOf(e)+')"><td>'+e.co+'</td><td>'+esc(e.tu)+'</td><td><b>'+esc(e.no)+'</b><div style="color:var(--g);font-size:12px">'+esc(e.em)+'</div></td><td>'+esc(e.et)+'</td><td class="num">'+(e.ds===''?'—':e.ds)+'</td><td>'+esc(e.fe||'')+'</td><td>'+esc(e.pa)+'</td></tr>'}).join('')+'</tbody></table></div>'+(r.length>400?'<div class="note">Se muestran 400 de '+r.length+'. Usa la búsqueda o descarga el Excel completo.</div>':''):'<div class="empty">Sin resultados.</div>';
 }
 function ordFn(){var k=S.ord;if(!k)return function(a,b){return a.co-b.co||String(a.no).localeCompare(String(b.no))};return function(a,b){var x=a[k],y=b[k];if(x===''||x==null)return 1;if(y===''||y==null)return-1;return typeof x==='number'?(k==='ds'?y-x:x-y):String(x).localeCompare(String(y))}}
 function openEst(i){S.est=P.est[i];S.v='est';render()}
@@ -205,7 +204,7 @@ function vEst(){
     st(res==='Aprobatorio',res==='No aprobatorio','Resultado del examen',res||'Sin resultado')+
     st(e.ce,0,'Certificado oficial AWS',e.ce?'Subido':'Pendiente')+
     (e.ba?st(0,1,'Baja registrada',e.mo||''):'')+
-    '</div><div class="card"><h3>Siguiente paso</h3><p style="margin:0 0 10px"><b>'+esc(e.pa)+'</b></p><div>'+(e.al||[]).map(function(k){return'<span class="tag '+(AL_R[k]?'r':'a')+'">'+AL[k]+'</span>'}).join('')+'</div><h3 style="margin-top:14px">Simulacro</h3><p style="margin:0">'+(e.si===''||e.si==null?'Sin intentos':'Mejor puntaje: '+esc(e.si))+'</p><h3 style="margin-top:14px">Etapa</h3><p style="margin:0">'+esc(e.et)+'</p></div></div>';
+    '</div><div class="card"><h3>Siguiente paso</h3><p style="margin:0 0 10px"><b>'+esc(e.pa)+'</b></p><h3 style="margin-top:14px">Simulacro</h3><p style="margin:0">'+(e.si===''||e.si==null?'Sin intentos':'Mejor puntaje: '+esc(e.si))+'</p><h3 style="margin-top:14px">Etapa</h3><p style="margin:0">'+esc(e.et)+'</p></div></div>';
   h+='<h2>Dudas de este estudiante ('+ds.length+')</h2>'+(ds.length?ds.map(function(d){return'<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+esc(d.te)+'</b>'+badge(d)+'</div><div class="sub" style="margin:2px 0 6px">'+esc(d.fo)+' · '+esc(d.fe)+'</div><div>'+esc(d.tx)+'</div>'+(d.re?'<div style="margin-top:6px;padding:8px;background:var(--vl);border-radius:8px"><b>Respuesta:</b> '+esc(d.re)+'<div class="sub" style="margin:2px 0 0">'+esc(d.fr||'')+(d.dr!==''&&d.dr!=null?' · atendida en '+d.dr+' día(s)':'')+'</div></div>':'')+(P.puedeResponder&&!d.au?'<div style="margin-top:8px"><button class="btn s" onclick="abrirDuda(\''+esc(d.fo)+'\')">'+(d.at?'Ver / reenviar':'Responder')+'</button></div>':'')+'</div>'}).join(''):'<div class="card empty">Sin dudas registradas.</div>');
   return h;
 }
@@ -271,14 +270,14 @@ function recargar(){api('panel',{token:SES.token}).then(function(j){if(!j.ok||j.
 function vDesc(){
   if(!full)return'<div class="empty">Sin acceso.</div>';
   var h='<h2 style="margin-top:4px">Descargas</h2><div class="sub">Cada archivo se genera al momento con los datos de la última actualización ('+esc(P.actualizado)+').</div>';
-  h+='<h2>Un Excel por tutor</h2><div class="card"><p style="margin-top:0">Libro de Excel con pestañas por etapa (Con alertas, Sin ingreso, Curso pendiente, Voucher pendiente, Sin fecha, Resultado pendiente, Falta certificado…) y las dudas de sus estudiantes. Para enviarlo al tutor.</p><div class="tools">'+P.agg.tutores.map(function(t){return'<button class="btn s" onclick="dlTutor('+q(t.tu)+')">⬇ '+esc(t.tu)+' <span class="tag">'+t.tot.n+'</span></button>'}).join('')+'<button class="btn" onclick="dlTodosTutores()">⬇ Todos los tutores (un archivo por tutor)</button></div></div>';
+  h+='<h2>Un Excel por tutor</h2><div class="card"><p style="margin-top:0">Libro de Excel con pestañas por etapa (Sin ingreso, Curso pendiente, Voucher pendiente, Sin fecha, Resultado pendiente, Falta certificado…) y las dudas de sus estudiantes. Para enviarlo al tutor.</p><div class="tools">'+P.agg.tutores.map(function(t){return'<button class="btn s" onclick="dlTutor('+q(t.tu)+')">⬇ '+esc(t.tu)+' <span class="tag">'+t.tot.n+'</span></button>'}).join('')+'<button class="btn" onclick="dlTodosTutores()">⬇ Todos los tutores (un archivo por tutor)</button></div></div>';
   h+='<h2>Por etapa</h2><div class="grid g2">'+Object.keys(LB).map(function(k){var n=P.agg.listas[k]||0;return'<div class="card"><b>'+LB[k]+'</b> <span class="tag">'+nf(n)+'</span><div class="sub" style="margin:2px 0 8px">'+DESC[k]+'</div><button class="btn s" onclick="dlEtapa(\''+k+'\')">⬇ Excel</button> <button class="btn s" onclick="go({v:\'lista\',tu:null,co:null,m:{s:\'li\',k:\''+k+'\'}})">Ver lista</button></div>'}).join('')+'</div>';
   h+='<h2>Dudas</h2><div class="card"><button class="btn s" onclick="dlDudas(1)">⬇ Todas las dudas (Excel)</button></div>';
   return h;
 }
 /* ---------- exportación ---------- */
-var HDR=['Cohort','Tutor','Nombre','Correo','Etapa','Siguiente paso','Alertas','Ingresos','Último acceso','Días sin acceso','Constancia curso','Voucher','Voucher canjeado','Fecha de examen','Resultado','Certificado oficial','Constancia NETEC','Simulacro (mejor)','Dudas','Motivo baja'];
-function fila(e){return[e.co,e.tu,e.no,e.em,e.et,e.pa,(e.al||[]).map(function(k){return AL[k]}).join('; '),e.ig,e.ua||'',e.ds,e.cu?'Sí':'No',e.vo||'',e.ca?'Sí':'No',e.fe||'',e.re||'',e.ce?'Sí':'No',e.ne?'Sí':'No',e.si===''||e.si==null?'':e.si,e.du||0,e.mo||'']}
+var HDR=['Cohort','Tutor','Nombre','Correo','Etapa','Siguiente paso','Ingresos','Último acceso','Días sin acceso','Constancia curso','Voucher','Voucher canjeado','Fecha de examen','Resultado','Certificado oficial','Constancia NETEC','Simulacro (mejor)','Dudas','Motivo baja'];
+function fila(e){return[e.co,e.tu,e.no,e.em,e.et,e.pa,e.ig,e.ua||'',e.ds,e.cu?'Sí':'No',e.vo||'',e.ca?'Sí':'No',e.fe||'',e.re||'',e.ce?'Sí':'No',e.ne?'Sí':'No',e.si===''||e.si==null?'':e.si,e.du||0,e.mo||'']}
 var DH=['Folio','Fecha','Cohort','Tutor asignado','Estudiante','Correo','Tema','Duda','Estado','Atendida','Fecha de respuesta','Días de atención','Días pendiente','Respuesta','Nota de escalada'];
 function dfila(x){return[x.fo,x.fe,x.co,x.tu,x.no,x.em,x.te,x.tx,estadoDuda(x)[0].replace('✓ ',''),x.at?'Sí':(x.au?'N/A':'No'),x.at?x.fr:'',x.at&&x.dr!==''?x.dr:'',x.ab?x.di:'',x.re||'',x.en||'']}
 function fecha(){return new Date().toISOString().slice(0,10)}
@@ -292,7 +291,7 @@ function guardar(wb,nombre){
 function libro(hojas){ // hojas: [[nombre, header, filas]]
   var wb=window.XLSX?XLSX.utils.book_new():{__rows:[]};
   hojas.forEach(function(h){var aoa=[h[1]].concat(h[2]);
-    if(window.XLSX){var ws=XLSX.utils.aoa_to_sheet(aoa);ws['!cols']=h[1].map(function(c,i){return{wch:[6,22,28,30,22,40,34,9,16,9,10,10,10,13,14,10,10,10,7,24][i]||14}});ws['!autofilter']={ref:ws['!ref']};XLSX.utils.book_append_sheet(wb,ws,h[0].slice(0,31))}
+    if(window.XLSX){var ws=XLSX.utils.aoa_to_sheet(aoa);ws['!cols']=h[1].map(function(c,i){return{wch:[6,22,28,30,22,40,9,16,9,10,10,10,13,14,10,10,10,7,24][i]||14}});ws['!autofilter']={ref:ws['!ref']};XLSX.utils.book_append_sheet(wb,ws,h[0].slice(0,31))}
     else if(!wb.__rows.length)wb.__rows=aoa});
   return wb;
 }
@@ -303,9 +302,8 @@ function dlDudas(todas){var r=todas?P.dudas:dudasF();guardar(libro([['Dudas',DH,
 function libroTutor(t){
   var E=P.est.filter(function(e){return e.tu===t}),D=P.dudas.filter(function(x){return x.tu===t});
   var por=function(k){return E.filter(function(e){return(e.li||[]).indexOf(k)>=0}).map(fila)};
-  var res=[['Resumen',['Concepto','Estudiantes'],[['Tutor',t],['Generado',fecha()+' (datos: '+P.actualizado+')'],['Registrados',E.length],['Con alertas',E.filter(function(e){return(e.al||[]).length}).length]].concat(Object.keys(LB).map(function(k){return[LB[k],por(k).length]}))]];
+  var res=[['Resumen',['Concepto','Estudiantes'],[['Tutor',t],['Generado',fecha()+' (datos: '+P.actualizado+')'],['Registrados',E.length]].concat(Object.keys(LB).map(function(k){return[LB[k],por(k).length]}))]];
   res.push(['Todos',HDR,E.map(fila)]);
-  res.push(['Con alertas',HDR,E.filter(function(e){return(e.al||[]).length}).map(fila)]);
   ['Sin_ingreso','Sin_actividad','Curso_pendiente','Voucher_pendiente','Sin_fecha_examen','Examen_programado','Resultado_pendiente','No_aprobaron','Falta_certificado','Aprobaron','Certificado_oficial','Netec_enviado','Netec_confirmado','Bajas'].forEach(function(k){res.push([LB[k],HDR,por(k)])});
   res.push(['Dudas',DH,D.map(dfila)]);
   return libro(res);
